@@ -16,6 +16,7 @@ import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 
 import CustomerCreateModel from '../modal/CustomerCreateModel'
+import Actions from './Actions'
 
 const Customer = () => {
   const [customer, setCustomer] = useState([])
@@ -47,10 +48,11 @@ const Customer = () => {
 
   const openCreateUser = () => {
     createUserModalRef.current?.show()
+    console.log(createUserModalRef.current)
   }
   console.log(customer)
   return (
-    <CRow>
+    <CRow className="overflow-scroll">
       <CCol>
         <CButton onClick={openCreateUser} className="px-4 mb-3">
           Create Customer
@@ -59,6 +61,7 @@ const Customer = () => {
       <CTable>
         <CTableHead>
           <CTableRow>
+            <CTableHeaderCell scope="col">Action</CTableHeaderCell>
             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
             <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
             <CTableHeaderCell scope="col">Age</CTableHeaderCell>
@@ -68,14 +71,17 @@ const Customer = () => {
             <CTableHeaderCell scope="col">Intimacy</CTableHeaderCell>
             <CTableHeaderCell scope="col">MinBudget</CTableHeaderCell>
             <CTableHeaderCell scope="col">MaxBudget</CTableHeaderCell>
-            <CTableHeaderCell scope="col">CaringArea</CTableHeaderCell>
-            <CTableHeaderCell scope="col">CaringProduct</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Khu vực quan tâm</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Sản phẩm quan tâm</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
           {customer.map((item, index) => {
             return (
               <CTableRow key={index}>
+                <CTableDataCell style={{ width: '200px' }}>
+                  <Actions item={item} />
+                </CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
                 <CTableDataCell>{item.phone}</CTableDataCell>
                 <CTableDataCell>{item.age}</CTableDataCell>

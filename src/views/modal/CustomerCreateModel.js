@@ -46,7 +46,7 @@ const CustomerCreateModel = ({}, ref) => {
   const [intimacy, setIntimacy] = useState('')
   const [minBudget, setMinBudget] = useState('')
   const [maxBudget, setMaxBudget] = useState('')
-  const [caringArea, setcaringArea] = useState([])
+  const [caringArea, setCaringArea] = useState([])
   const [caringProduct, setCaringProduct] = useState([])
 
   const [error, setError] = useState(false)
@@ -54,6 +54,29 @@ const CustomerCreateModel = ({}, ref) => {
 
   const provinces = provinces_item
 
+  function handleArea(e) {
+    const { value, checked } = e.target
+
+    if (checked) {
+      setCaringArea((pre) => [...pre, value])
+    } else {
+      setCaringArea((pre) => {
+        return [...pre.filter((v) => v === value)]
+      })
+    }
+    console.log(value, checked)
+  }
+  function handleProduct(e) {
+    const { value, checked } = e.target
+
+    if (checked) {
+      setCaringProduct((pre) => [...pre, value])
+    } else {
+      setCaringProduct((pre) => {
+        return [...pre.filter((v) => v !== value)]
+      })
+    }
+  }
   useImperativeHandle(ref, () => ({
     show: () => {
       setVisible(true)
@@ -87,7 +110,7 @@ const CustomerCreateModel = ({}, ref) => {
   return (
     <CModal visible={visible} onClose={() => setVisible(false)}>
       <CModalHeader closeButton>
-        <CModalTitle>Create User</CModalTitle>
+        <CModalTitle>Create Customer</CModalTitle>
       </CModalHeader>
       <CModalBody>
         {error && <CAlert color="danger">{'Error'}</CAlert>}
@@ -145,8 +168,13 @@ const CustomerCreateModel = ({}, ref) => {
               value={userArea}
               onChange={(e) => setUserArea(e.target.value)}
             >
+              <option>Chọn thành phố</option>
               {provinces.map((p) => {
-                return <option key={p.code}>{p.name}</option>
+                return (
+                  <option key={p.code} value={p.name}>
+                    {p.name}
+                  </option>
+                )
               })}
             </CFormSelect>
           </CInputGroup>
@@ -173,37 +201,28 @@ const CustomerCreateModel = ({}, ref) => {
               <option value="S">S</option>
               <option value="A">A</option>
               <option value="B">B</option>
-              <option value="c">C</option>
+              <option value="C">C</option>
             </CFormSelect>
           </CInputGroup>
           <CInputGroup className="mb-4">
             <CInputGroupText>
               <CIcon icon={cilMoney} />
             </CInputGroupText>
-            <CFormSelect
-              aria-label="Default select example"
+            <CFormInput
+              type="minBudget"
+              placeholder="Min Budget(tỷ)"
               value={minBudget}
-              onChange={(e) => setMinBudget(e.target.value)}
-            >
-              <option>Min Budget</option>
-              <option value="0">0</option>
-              <option value="5">5 tỷ</option>
-              <option value="10">10 tỷ</option>
-              <option value="50">50 tỷ</option>
-            </CFormSelect>
+              onChange={(event) => setMinBudget(event.target.value)}
+            />
             <CInputGroupText>
               <CIcon icon={cilArrowRight} color="light" />
             </CInputGroupText>
-            <CFormSelect
-              aria-label="Default select example"
+            <CFormInput
+              type="maxBudget"
+              placeholder="Max Budget(tỷ)"
               value={maxBudget}
-              onChange={(e) => setMaxBudget(e.target.value)}
-            >
-              <option>Max Budget</option>
-              <option value="5">5 tỷ</option>
-              <option value="10">10 tỷ</option>
-              <option value="50">50 tỷ</option>
-            </CFormSelect>
+              onChange={(event) => setMaxBudget(event.target.value)}
+            />
           </CInputGroup>
           <CInputGroup className="mb-4">
             <CInputGroup>
@@ -216,15 +235,69 @@ const CustomerCreateModel = ({}, ref) => {
                   lineHeight: '2px',
                 }}
               >
-                CaringArea
+                Khu vực quan tâm
               </div>
               <CInputGroup>
-                <CFormCheck inline id="inlineCheckbox1" value="option1" label="Đà Nẵng" />
-                <CFormCheck inline id="inlineCheckbox2" value="option2" label="Khánh Hòa" />
-                <CFormCheck inline id="inlineCheckbox3" value="option3" label="Phú Quốc " />
-                <CFormCheck inline id="inlineCheckbox3" value="option3" label="Sài Gòn " />
-                <CFormCheck inline id="inlineCheckbox3" value="option3" label="Đồng Nai " />
-                <CFormCheck inline id="inlineCheckbox3" value="option3" label="Vũng Tàu " />
+                <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Đà Nẵng"
+                    onChange={handleArea}
+                  />
+                  <label>Đà Nẵng</label>
+                </div>
+                <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Khánh Hòa"
+                    onChange={handleArea}
+                  />
+                  <label>Khánh Hòa</label>
+                </div>
+                <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Phú Quốc"
+                    onChange={handleArea}
+                  />
+                  <label>Phú Quốc</label>
+                </div>
+                <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Sài Gòn"
+                    onChange={handleArea}
+                  />
+                  <label>Sài Gòn</label>
+                </div>
+                <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Đồng Nai"
+                    onChange={handleArea}
+                  />
+                  <label>Đồng Nai</label>
+                </div>
+                <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Vũng Tàu"
+                    onChange={handleArea}
+                  />
+                  <label>Vũng Tàu</label>
+                </div>
               </CInputGroup>
             </CInputGroup>
             <CInputGroup>
@@ -237,14 +310,59 @@ const CustomerCreateModel = ({}, ref) => {
                   lineHeight: '2px',
                 }}
               >
-                CaringProduct
+                Sản phẩm quan tâm
               </div>
               <CInputGroup>
-                <CFormCheck inline id="inlineCheckbox1" value="option1" label="Đất nền" />
-                <CFormCheck inline id="inlineCheckbox2" value="option2" label="Đất lớn" />
-                <CFormCheck inline id="inlineCheckbox3" value="option3" label="BĐS trung tâm " />
-                <CFormCheck inline id="inlineCheckbox3" value="option3" label="BĐS dòng tiền " />
-                <CFormCheck inline id="inlineCheckbox3" value="option3" label="Dự án " />
+                <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Đất nền"
+                    onChange={handleProduct}
+                  />
+                  <label>Đất nền</label>
+                </div>
+                <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Đất lớn"
+                    onChange={handleProduct}
+                  />
+                  <label>Đất lớn</label>
+                </div>
+                <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="BĐS trung tâm"
+                    onChange={handleProduct}
+                  />
+                  <label>BĐS trung tâm</label>
+                </div>
+                <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="BĐS dòng tiền"
+                    onChange={handleProduct}
+                  />
+                  <label>BĐS dòng tiền</label>
+                </div>
+                <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
+                  <input
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value="Dự án"
+                    onChange={handleProduct}
+                  />
+                  <label>Dự án</label>
+                </div>
               </CInputGroup>
             </CInputGroup>
           </CInputGroup>
