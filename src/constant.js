@@ -4,5 +4,5 @@ export const BACKEND_HOST =
     : 'https://api.namthanhdatholdings.com'
 
 export const productType = [
-  { value: 'datNen', name: 'Đất nền'}
+  { value: 'dat_nen', name: 'Đất nền' }
 ]
