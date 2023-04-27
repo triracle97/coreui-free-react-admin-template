@@ -86,7 +86,17 @@ const CustomerCreateModel = ({}, ref) => {
   const handleSubmit = () => {
     axios
       .post(`${BACKEND_HOST}/customer/create`, {
-        product: {},
+        name,
+        phone,
+        age,
+        job,
+        userArea,
+        goodwill,
+        intimacy,
+        minBudget,
+        maxBudget,
+        caringArea,
+        caringProduct,
       })
       .then((res) => {
         setSuccess(true)

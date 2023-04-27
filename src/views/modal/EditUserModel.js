@@ -37,8 +37,7 @@ const EditUserModel = ({ item }, ref) => {
   const handleSubmit = () => {
     axios
       .patch(`${BACKEND_HOST}/user/${item.id}`, {
-        username,
-        name,
+        values: { name, username, password },
       })
       .then((res) => {
         setSuccess(true)

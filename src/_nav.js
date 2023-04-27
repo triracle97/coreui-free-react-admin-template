@@ -45,6 +45,15 @@ const _nav = [
       color: 'info',
     },
   },
+  {
+    component: CNavItem,
+    name: 'Product',
+    to: '/product',
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+    badge: {
+      color: 'info',
+    },
+  },
   // // {
   // //   component: CNavTitle,
   // //   name: 'Theme',
