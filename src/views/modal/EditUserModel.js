@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
 import React, { useState, useImperativeHandle } from 'react'
 import {
   CButton,
@@ -18,15 +20,13 @@ import { cilLockLocked, cilUser, cilText } from '@coreui/icons'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 
-const UserCreateModal = ({ getUsersData }, ref) => {
+const EditUserModel = ({ item }, ref) => {
   const [visible, setVisible] = useState(false)
-  const [username, setUsername] = useState('')
-  const [name, setName] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState(item.username)
+  const [name, setName] = useState(item.name)
+  const [password, setPassword] = useState(item.password)
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
-
-  const get = getUsersData
 
   useImperativeHandle(ref, () => ({
     show: () => {
@@ -36,14 +36,11 @@ const UserCreateModal = ({ getUsersData }, ref) => {
 
   const handleSubmit = () => {
     axios
-      .post(`${BACKEND_HOST}/user/create`, {
-        username,
-        password,
-        name,
+      .patch(`${BACKEND_HOST}/user/${item.id}`, {
+        values: { name, username, password },
       })
       .then((res) => {
         setSuccess(true)
-        get()
       })
       .catch((err) => {
         console.log('Error', err)
@@ -54,7 +51,7 @@ const UserCreateModal = ({ getUsersData }, ref) => {
   return (
     <CModal visible={visible} onClose={() => setVisible(false)}>
       <CModalHeader closeButton>
-        <CModalTitle>Create User</CModalTitle>
+        <CModalTitle>Edit User</CModalTitle>
       </CModalHeader>
       <CModalBody>
         {error && <CAlert color="danger">{'Error'}</CAlert>}
@@ -100,11 +97,11 @@ const UserCreateModal = ({ getUsersData }, ref) => {
           Cancel
         </CButton>
         <CButton color="primary" onClick={handleSubmit}>
-          Create
+          Update
         </CButton>
       </CModalFooter>
     </CModal>
   )
 }
 
-export default React.forwardRef(UserCreateModal)
+export default React.forwardRef(EditUserModel)
