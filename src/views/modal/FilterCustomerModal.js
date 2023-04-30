@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
-import React, { useState, useImperativeHandle, useEffect } from 'react'
+import React, { useState, useImperativeHandle } from 'react'
 import {
   CButton,
   CModal,
@@ -15,37 +15,23 @@ import {
   CInputGroup,
   CAlert,
   CFormSelect,
-  CFormCheck,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
-  cilLockLocked,
-  cilUser,
-  cilText,
-  cilPhone,
-  cilFactory,
-  cilBriefcase,
-  cilLocationPin,
   cilStar,
   cilMoney,
   cilArrowRight,
 } from '@coreui/icons'
-import axios from 'axios'
-import { BACKEND_HOST } from '../../constant'
 import provinces_item from './Provinces.json'
-import MultiSelect from 'src/components/multiselect/MultiSelect'
 
-const CustomerCreateModel = ({}, ref) => {
+const FilterCustomerModal = ({
+  handleSubmit
+}, ref) => {
   const [visible, setVisible] = useState(false)
-  const [phone, setPhone] = useState('')
-  const [name, setName] = useState('')
-  const [age, setAge] = useState('')
-  const [job, setJob] = useState('')
-  const [userArea, setUserArea] = useState('')
-  const [goodwill, setGoodWill] = useState('')
-  const [intimacy, setIntimacy] = useState('')
-  const [minBudget, setMinBudget] = useState('')
-  const [maxBudget, setMaxBudget] = useState('')
+  const [goodwill, setGoodWill] = useState(null)
+  const [intimacy, setIntimacy] = useState(null)
+  const [minBudget, setMinBudget] = useState(null)
+  const [maxBudget, setMaxBudget] = useState(null)
   const [caringArea, setCaringArea] = useState([])
   const [caringProduct, setCaringProduct] = useState([])
 
@@ -64,7 +50,6 @@ const CustomerCreateModel = ({}, ref) => {
         return [...pre.filter((v) => v === value)]
       })
     }
-    console.log(value, checked)
   }
   function handleProduct(e) {
     const { value, checked } = e.target
@@ -83,28 +68,22 @@ const CustomerCreateModel = ({}, ref) => {
     },
   }))
 
-  const handleSubmit = () => {
-    axios
-      .post(`${BACKEND_HOST}/customer/create`, {
-        name,
-        phone,
-        age,
-        job,
-        userArea,
-        goodwill,
-        intimacy,
-        minBudget,
-        maxBudget,
-        caringArea,
-        caringProduct,
-      })
-      .then((res) => {
-        setSuccess(true)
-      })
-      .catch((err) => {
-        console.log('Error', err)
-        setError(true)
-      })
+  const onPressFilter = () => {
+    const filter = {};
+    if (goodwill)
+      filter.goodwill = goodwill
+    if (intimacy)
+      filter.intimacy = intimacy
+    if (minBudget)
+      filter.minBudget = minBudget
+    if (maxBudget)
+      filter.maxBudget = maxBudget
+    if (caringArea.length)
+      filter.caringArea = caringArea
+    if (caringProduct.length)
+      filter.caringProduct = caringProduct
+    handleSubmit(filter)
+    setVisible(false)
   }
 
   return (
@@ -115,69 +94,8 @@ const CustomerCreateModel = ({}, ref) => {
       <CModalBody>
         {error && <CAlert color="danger">{'Error'}</CAlert>}
         {success && <CAlert color="success">{'Done'}</CAlert>}
+        <CInputGroupText className={"mb-3"}>Trường nào không muốn filter có thể bỏ trống</CInputGroupText>
         <CForm>
-          <CInputGroup className="mb-3">
-            <CInputGroupText>
-              <CIcon icon={cilUser} />
-            </CInputGroupText>
-            <CFormInput
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Name"
-              autoComplete="name"
-            />
-          </CInputGroup>
-          <CInputGroup className="mb-3">
-            <CInputGroupText>
-              <CIcon icon={cilPhone} />
-            </CInputGroupText>
-            <CFormInput
-              placeholder="Phone"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-            />
-          </CInputGroup>
-          <CInputGroup className="mb-4">
-            <CInputGroupText>
-              <CIcon icon={cilText} />
-            </CInputGroupText>
-            <CFormInput
-              type="age"
-              placeholder="Age"
-              value={age}
-              onChange={(event) => setAge(event.target.value)}
-            />
-          </CInputGroup>
-          <CInputGroup className="mb-4">
-            <CInputGroupText>
-              <CIcon icon={cilBriefcase} />
-            </CInputGroupText>
-            <CFormInput
-              type="job"
-              placeholder="Job"
-              value={job}
-              onChange={(event) => setJob(event.target.value)}
-            />
-          </CInputGroup>
-          <CInputGroup className="mb-4">
-            <CInputGroupText>
-              <CIcon icon={cilLocationPin} />
-            </CInputGroupText>
-            <CFormSelect
-              aria-label="Default select example"
-              value={userArea}
-              onChange={(e) => setUserArea(e.target.value)}
-            >
-              <option>Chọn thành phố</option>
-              {provinces.map((p) => {
-                return (
-                  <option key={p.code} value={p.name}>
-                    {p.name}
-                  </option>
-                )
-              })}
-            </CFormSelect>
-          </CInputGroup>
           <CInputGroup className="mb-4">
             <CInputGroupText>
               <CIcon icon={cilStar} />
@@ -372,12 +290,12 @@ const CustomerCreateModel = ({}, ref) => {
         <CButton color="secondary" onClick={() => setVisible(false)}>
           Cancel
         </CButton>
-        <CButton color="primary" onClick={handleSubmit}>
-          Create
+        <CButton color="primary" onClick={onPressFilter}>
+          Filter
         </CButton>
       </CModalFooter>
     </CModal>
   )
 }
 
-export default React.forwardRef(CustomerCreateModel)
+export default React.forwardRef(FilterCustomerModal)
