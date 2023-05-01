@@ -13,33 +13,35 @@ import {
   CInputGroupText,
   CRow,
   CModal,
-  CModalBody
+  CModalBody,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import axios from 'axios';
-import { BACKEND_HOST } from '../../../constant';
-import { useDispatch } from 'react-redux';
-import Cookies from 'js-cookie';
+import axios from 'axios'
+import { BACKEND_HOST } from '../../../constant'
+import { useDispatch } from 'react-redux'
+import Cookies from 'js-cookie'
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const dispatch = useDispatch();
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const dispatch = useDispatch()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const doLogin = async () => {
     try {
-      const response = await axios.post(`${BACKEND_HOST}/auth/login`, {username, password});
-      const token = response?.data?.token;
-      dispatch({ type: 'set', authToken: token });
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      Cookies.set('authToken', token, { expires: 1 });
-      navigate('/dashboard');
+      const response = await axios.post(`${BACKEND_HOST}/auth/login`, { username, password })
+      const token = response?.data?.token
+      const role = response?.data?.role
+      dispatch({ type: 'set', authToken: token })
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      Cookies.set('authToken', token, { expires: 1 })
+      Cookies.set('role', role)
+      navigate('/product')
     } catch (err) {
-      console.log('Error while login', err);
-      setShowErrorModal(true);
+      console.log('Error while login', err)
+      setShowErrorModal(true)
     }
   }
 
@@ -62,7 +64,8 @@ const Login = () => {
                         value={username}
                         onChange={(event) => setUsername(event.target.value)}
                         placeholder="Username"
-                        autoComplete="username"/>
+                        autoComplete="username"
+                      />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -88,9 +91,7 @@ const Login = () => {
             </CCardGroup>
           </CCol>
         </CRow>
-        <CModal
-          visible={showErrorModal}
-          onClose={() => setShowErrorModal(false)}>
+        <CModal visible={showErrorModal} onClose={() => setShowErrorModal(false)}>
           <CModalBody>
             <p>Incorrect username or password. Please try again.</p>
           </CModalBody>
