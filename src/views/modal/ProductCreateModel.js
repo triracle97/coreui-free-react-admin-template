@@ -25,6 +25,7 @@ import DatTs from 'src/components/forms/DatTs'
 
 const ProductCreateModel = ({}, ref) => {
   const [visible, setVisible] = useState(false)
+  const [ten_san_pham, setTen_san_pham] = useState('')
   const [nguon_sp, setNguon_sp] = useState('')
   const [khu_vuc, setKhu_vuc] = useState('')
   const [dia_chi, setDia_chi] = useState('')
@@ -34,8 +35,6 @@ const ProductCreateModel = ({}, ref) => {
   const [success, setSuccess] = useState(false)
   const data = useRef({})
 
-  console.log(data)
-
   useImperativeHandle(ref, () => ({
     show: () => {
       setVisible(true)
@@ -44,46 +43,77 @@ const ProductCreateModel = ({}, ref) => {
   const handleSubmit = () => {
     axios
       .post(`${BACKEND_HOST}/product/create`, {
-        nguon_sp,
-        khu_vuc,
-        dia_chi,
-        khu_vuc_khac,
-        loai_sp,
-        other_data: {
-          tong_dien_tich: data.current.tong_dien_tich,
-          dien_tich_san: data.current.dien_tich_san,
-          phap_ly: data.current.phap_ly,
-          phap_ly_infor: {
-            khac: data.current.khac,
-            so_to: data.current.so_to,
-            so_thua: data.current.so_thua,
-            ma_lo: data.current.ma_lo,
+        product: {
+          nguon_sp,
+          ten_san_pham,
+          khu_vuc,
+          dia_chi,
+          khu_vuc_khac,
+          loai_sp,
+          created_at: Date.now(),
+          other_data: {
+            tong_dien_tich: data.current.tong_dien_tich,
+            dien_tich_san: data.current.dien_tich_san,
+            phap_ly: data.current.phap_ly,
+            phap_ly_infor: {
+              khac: data.current.khac,
+              so_to: data.current.so_to,
+              so_thua: data.current.so_thua,
+              ma_lo: data.current.ma_lo,
+            },
+            muc_dich_su_dung_dat: {
+              hien_trang: {
+                dat_o: data.current.ht_dat_o,
+                CLN: data.current.ht_cln,
+                BHK: data.current.ht_bhk,
+                LUC: data.current.ht_luc,
+                RSX: data.current.ht_rsx,
+                NTS: data.current.ht_nts,
+                TMD: data.current.ht_tmd,
+                cong_cong: data.current.ht_cong_cong,
+                qh_giao_thong: data.current.ht_qh_giao_thong,
+              },
+              qui_hoach: {
+                dat_o: data.current.dat_o,
+                CLN: data.current.cln,
+                BHK: data.current.bhk,
+                LUC: data.current.luc,
+                RSX: data.current.rsx,
+                NTS: data.current.nts,
+                TMD: data.current.tmd,
+                cong_cong: data.current.cong_cong,
+                qh_giao_thong: data.current.qh_giao_thong,
+              },
+              note: data.current.note_ht,
+            },
+            dinh_vi: data.current.dinh_vi,
+            gia_ban: data.current.gia_ban,
+            hoa_hong: data.current.hoa_hong,
+            nguon: data.current.nguon,
+            file_media_raw: data.current.file_media_raw,
+            note: data.current.note,
+            tai_san_gan_lien: data.current.tai_san_gan_lien,
+            dong_tien: data.current.dong_tien,
+            ten_ks: data.current.ten_ks,
+            so_sao: data.current.so_sao,
+            trang_thai: data.current.trang_thai,
+            hien_trang_phap_ly: data.current.hien_trang_phap_ly,
+            so_tang: data.current.so_tang,
+            so_phong: data.current.so_phong,
+            muc_dich_su_dung_dat_khach_san: data.current.muc_dich_su_dung_dat_khach_san,
+            chu_so_huu: data.current.chu_so_huu,
+            chu_dau_tu: data.current.chu_dau_tu,
+            doanh_thu_thang: data.current.doanh_thu_thang,
+            loi_nhuan_thang: data.current.loi_nhuan_thang,
+            loai_hinh: data.current.loai_hinh,
+            ten_du_an: data.current.ten_du_an,
+            hinh_thuc_chuyen_nhuong: data.current.hinh_thuc_chuyen_nhuong,
+            phuong_an_thanh_toan: data.current.phuong_an_thanh_toan,
           },
         },
-        dinh_vi: data.current.dinh_vi,
-        gia_ban: data.current.gia_ban,
-        hoa_hong: data.current.hoa_hong,
-        nguon: data.current.nguon,
-        file_media_raw: data.current.file_media_raw,
-        note: data.current.note,
-        tai_san_gan_lien: data.current.tai_san_gan_lien,
-        dong_tien: data.current.dong_tien,
-        ten_ks: data.current.ten_ks,
-        so_sao: data.current.so_sao,
-        trang_thai: data.current.trang_thai,
-        so_tang: data.current.so_tang,
-        so_phong: data.current.so_phong,
-        muc_dich_su_dung_dat_khach_san: data.current.muc_dich_su_dung_dat_khach_san,
-        chu_so_huu: data.current.chu_so_huu,
-        chu_dau_tu: data.current.chu_dau_tu,
-        doanh_thu_thang: data.current.doanh_thu_thang,
-        loi_nhuan_thang: data.current.loi_nhuan_thang,
-        loai_hinh: data.current.loai_hinh,
-        ten_du_an: data.current.ten_du_an,
-        hinh_thuc_chuyen_nhuong: data.current.hinh_thuc_chuyen_nhuong,
-        phuong_an_thanh_toan: data.current.phuong_an_thanh_toan,
       })
       .then((res) => {
+        console.log(res)
         setSuccess(true)
       })
       .catch((err) => {
@@ -112,6 +142,14 @@ const ProductCreateModel = ({}, ref) => {
               <option value="khanh">Khánh</option>
               <option value="dat">Đạt</option>
             </CFormSelect>
+          </CInputGroup>
+          <CInputGroup className="mb-3">
+            <CInputGroupText>Tên sản phẩm</CInputGroupText>
+            <CFormInput
+              placeholder="Nhập tên sản phẩm"
+              value={ten_san_pham}
+              onChange={(event) => setTen_san_pham(event.target.value)}
+            />
           </CInputGroup>
           <CInputGroup className="mb-3">
             <CInputGroupText>Khu vực</CInputGroupText>

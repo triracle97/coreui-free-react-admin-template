@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import { CFormInput, CFormSelect, CInputGroup, CInputGroupText } from '@coreui/react'
@@ -16,7 +18,7 @@ export default function DuAn({ data }) {
   const [hoa_hong, setHoa_hong] = useState('')
   const [nguon, setNguon] = useState('')
   const [note, setNote] = useState('')
-  const [file_media_raw, setFile_media_raw] = useState([])
+  const [file_media_raw, setFile_media_raw] = useState('')
 
   useEffect(() => {
     data.current = {
@@ -33,7 +35,20 @@ export default function DuAn({ data }) {
       note,
       file_media_raw,
     }
-  }, [])
+  }, [
+    loai_hinh,
+    ten_du_an,
+    tong_dien_tich,
+    chu_dau_tu,
+    hinh_thuc_chuyen_nhuong,
+    phuong_an_thanh_toan,
+    hien_trang_phap_ly,
+    gia_ban,
+    hoa_hong,
+    nguon,
+    note,
+    file_media_raw,
+  ])
 
   function handle(e) {
     const { value, checked } = e.target
@@ -170,9 +185,9 @@ export default function DuAn({ data }) {
           aria-label="Default select example"
         >
           <option>Chọn hình thức </option>
-          <option value="nha_o_thuong_mai">100% cổ phần</option>
-          <option value="building">Một phần cổ phần</option>
-          <option value="chung_cu">Hợp tác kinh doanh</option>
+          <option value="100_co_phan">100% cổ phần</option>
+          <option value="mot_phan_co_phan">Một phần cổ phần</option>
+          <option value="hop_tac_kinh_doanh">Hợp tác kinh doanh</option>
         </CFormSelect>
       </CInputGroup>
       <CInputGroup className="mb-2">

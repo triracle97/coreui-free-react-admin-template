@@ -243,7 +243,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Đà Nẵng"
+                    value="da-nang"
                     onChange={handleArea}
                   />
                   <label>Đà Nẵng</label>
@@ -253,7 +253,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Khánh Hòa"
+                    value="khanh-hoa"
                     onChange={handleArea}
                   />
                   <label>Khánh Hòa</label>
@@ -263,7 +263,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Phú Quốc"
+                    value="phu-quoc"
                     onChange={handleArea}
                   />
                   <label>Phú Quốc</label>
@@ -273,7 +273,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Sài Gòn"
+                    value="sai-gon"
                     onChange={handleArea}
                   />
                   <label>Sài Gòn</label>
@@ -283,7 +283,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Đồng Nai"
+                    value="dong-nai"
                     onChange={handleArea}
                   />
                   <label>Đồng Nai</label>
@@ -293,7 +293,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Vũng Tàu"
+                    value="vung-tau"
                     onChange={handleArea}
                   />
                   <label>Vũng Tàu</label>
@@ -318,7 +318,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Đất nền"
+                    value="dat_nen"
                     onChange={handleProduct}
                   />
                   <label>Đất nền</label>
@@ -328,7 +328,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Đất lớn"
+                    value="dat_lon"
                     onChange={handleProduct}
                   />
                   <label>Đất lớn</label>
@@ -338,7 +338,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="BĐS trung tâm"
+                    value="bds_trung_tam"
                     onChange={handleProduct}
                   />
                   <label>BĐS trung tâm</label>
@@ -348,7 +348,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="BĐS dòng tiền"
+                    value="bds_dong_tien"
                     onChange={handleProduct}
                   />
                   <label>BĐS dòng tiền</label>
@@ -358,7 +358,7 @@ const CustomerCreateModel = ({}, ref) => {
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
-                    value="Dự án"
+                    value="du_an"
                     onChange={handleProduct}
                   />
                   <label>Dự án</label>

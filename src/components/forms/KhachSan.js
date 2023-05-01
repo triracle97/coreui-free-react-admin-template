@@ -26,7 +26,7 @@ export default function KhachSan({ data }) {
   const [hoa_hong, setHoa_hong] = useState('')
   const [nguon, setNguon] = useState('')
   const [note, setNote] = useState('')
-  const [file_media_raw, setFile_media_raw] = useState([])
+  const [file_media_raw, setFile_media_raw] = useState('')
 
   useEffect(() => {
     data.current = {
@@ -51,7 +51,29 @@ export default function KhachSan({ data }) {
       note,
       file_media_raw,
     }
-  }, [])
+  }, [
+    ten_ks,
+    so_sao,
+    phap_ly,
+    khac,
+    ma_lo,
+    so_to,
+    so_thua,
+    trang_thai,
+    tong_dien_tich,
+    so_tang,
+    so_phong,
+    muc_dich_su_dung_dat_khach_san,
+    chu_so_huu,
+    loi_nhuan_thang,
+    dinh_vi,
+    gia_ban,
+    hoa_hong,
+    nguon,
+    note,
+    file_media_raw,
+    data,
+  ])
 
   return (
     <>
@@ -140,13 +162,13 @@ export default function KhachSan({ data }) {
         <CInputGroupText>Diện tích(m2)</CInputGroupText>
         <CFormInput
           value={tong_dien_tich}
-          onChange={(e) => setTong_dien_tich(e.tar.get.value)}
+          onChange={(e) => setTong_dien_tich(e.target.value)}
           placeholder="Nhập diện tích"
         />
         <CInputGroupText>Diện tích sàn(m2)</CInputGroupText>
         <CFormInput
           value={dien_tich_san}
-          onChange={(e) => setDien_tich_san(e.tar.get.value)}
+          onChange={(e) => setDien_tich_san(e.target.value)}
           placeholder="Nhập diện tích sàn"
         />
       </CInputGroup>
@@ -172,8 +194,8 @@ export default function KhachSan({ data }) {
           aria-label="Default select example"
         >
           <option>Chọn mục đích</option>
-          <option value="odt">ODT</option>
-          <option value="tmd">TMD</option>
+          <option value="ODT">ODT</option>
+          <option value="TMD">TMD</option>
         </CFormSelect>
       </CInputGroup>
       <CInputGroup className="mb-2">
@@ -195,6 +217,8 @@ export default function KhachSan({ data }) {
           onChange={(e) => setDoanh_thu_thang(e.target.value)}
           placeholder=""
         />
+      </CInputGroup>
+      <CInputGroup>
         <CInputGroupText>Lợi nhuận tháng(triệu)</CInputGroupText>
         <CFormInput
           value={loi_nhuan_thang}
