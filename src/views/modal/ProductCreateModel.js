@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
 import React, { useState, useImperativeHandle, useRef } from 'react'
 import {
   CButton,
@@ -23,7 +25,7 @@ import KhachSan from 'src/components/forms/KhachSan'
 import DuAn from 'src/components/forms/DuAn'
 import DatTs from 'src/components/forms/DatTs'
 
-const ProductCreateModel = ({}, ref) => {
+const ProductCreateModel = ({ getProductsData }, ref) => {
   const [visible, setVisible] = useState(false)
   const [ten_san_pham, setTen_san_pham] = useState('')
   const [nguon_sp, setNguon_sp] = useState('')
@@ -115,6 +117,7 @@ const ProductCreateModel = ({}, ref) => {
       .then((res) => {
         console.log(res)
         setSuccess(true)
+        getProductsData()
       })
       .catch((err) => {
         console.log('Error', err)

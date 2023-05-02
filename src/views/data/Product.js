@@ -39,11 +39,25 @@ export default function Product() {
       })
       .then((res) => {
         const newProduct = res.data.products
+        console.log(res)
         setProducts(newProduct)
         console.log('success')
       })
       .catch((err) => {
         console.log('Error while getting Product', err)
+      })
+  }
+
+  const deleteProduct = (id) => {
+    axios
+      .delete(`${BACKEND_HOST}/product/${id}`, {
+        method: 'DELETE',
+      })
+      .then((res) => {
+        console.log('success')
+      })
+      .catch((err) => {
+        console.log('Error', err)
       })
   }
 
@@ -73,6 +87,7 @@ export default function Product() {
             <CTableHeaderCell scope="col">Loại sản phẩm</CTableHeaderCell>
             <CTableHeaderCell scope="col">Khu vực</CTableHeaderCell>
             <CTableHeaderCell scope="col">Ngày tạo</CTableHeaderCell>
+            {role === 'admin' ? <CTableHeaderCell scope="col">Status</CTableHeaderCell> : <></>}
           </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -81,37 +96,46 @@ export default function Product() {
               <CTableDataCell>
                 {role === 'admin' ? (
                   <>
-                    <CButton color="danger" className="mx-1">
-                      {p.status}
-                    </CButton>
                     <CButton color="success" className="mx-1">
                       Accept
                     </CButton>
                     <CButton color="secondary" className="mx-1">
                       Reject
                     </CButton>
-                    <CButton color="danger" variant="outline" className="mx-1">
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      className="mx-1"
+                      onClick={deleteProduct(p._id)}
+                    >
                       Delete
-                    </CButton>
-                    <CButton color="primary" className="mx-1">
-                      Edit
                     </CButton>
                   </>
                 ) : (
-                  <CButton color="primary" className="mx-1">
-                    Edit
-                  </CButton>
+                  <></>
                 )}
+                <CButton color="primary" className="mx-1">
+                  Edit
+                </CButton>
               </CTableDataCell>
               <CTableDataCell>{p.ten_san_pham}</CTableDataCell>
               <CTableDataCell>{p.loai_sp}</CTableDataCell>
               <CTableDataCell>{p.khu_vuc}</CTableDataCell>
               <CTableDataCell>{getFormatTime(p.created_at)}</CTableDataCell>
+              {role === 'admin' ? (
+                <CTableDataCell>
+                  <CButton color="danger" className="mx-1">
+                    {p.status}
+                  </CButton>
+                </CTableDataCell>
+              ) : (
+                <></>
+              )}
             </CTableRow>
           ))}
         </CTableBody>
       </CTable>
-      <ProductCreateModel ref={createProductModelRef} />
+      <ProductCreateModel ref={createProductModelRef} getProductsData={getProductsData} />
     </CRow>
   )
 }
