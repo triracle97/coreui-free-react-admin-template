@@ -106,7 +106,7 @@ export default function Product() {
                       color="danger"
                       variant="outline"
                       className="mx-1"
-                      onClick={deleteProduct(p._id)}
+                      onClick={() => deleteProduct(p._id)}
                     >
                       Delete
                     </CButton>
