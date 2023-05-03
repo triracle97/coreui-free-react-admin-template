@@ -17,6 +17,7 @@ import { BACKEND_HOST } from '../../constant'
 
 import CustomerCreateModel from '../modal/CustomerCreateModel'
 import Actions from './Actions'
+import FilterCustomerModal from '../modal/FilterCustomerModal';
 
 const Customer = () => {
   const [customer, setCustomer] = useState([])
@@ -24,6 +25,7 @@ const Customer = () => {
   const [offset, setOffset] = useState(0)
 
   const createUserModalRef = useRef()
+  const filterUserModalRef = useRef()
 
   useEffect(() => {
     getCustomersData()
@@ -46,16 +48,36 @@ const Customer = () => {
       })
   }
 
+  const filterCustomerData = () => {
+    filterUserModalRef.current?.show()
+  }
+
   const openCreateUser = () => {
     createUserModalRef.current?.show()
-    console.log(createUserModalRef.current)
   }
-  console.log(customer)
+
+  const handleFilterSubmit = (filter) => {
+    axios
+      .get(`${BACKEND_HOST}/customer/filter`, {
+        params: {
+          ...filter
+        }
+      })
+      .then((res) => {
+        if (res.data?.customers) {
+          setCustomer(res.data?.customers);
+        }
+      })
+  }
+
   return (
     <CRow className="overflow-scroll">
       <CCol>
         <CButton onClick={openCreateUser} className="px-4 mb-3">
           Create Customer
+        </CButton>
+        <CButton onClick={filterCustomerData} className="px-4 mb-3 mx-lg-3">
+          Filter customer
         </CButton>
       </CCol>
       <CTable>
@@ -108,6 +130,9 @@ const Customer = () => {
         </CPaginationItem>
       </CPagination>
       <CustomerCreateModel ref={createUserModalRef} />
+      <FilterCustomerModal
+        handleSubmit={handleFilterSubmit}
+        ref={filterUserModalRef} />
     </CRow>
   )
 }
