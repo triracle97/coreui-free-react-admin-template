@@ -22,7 +22,8 @@ import EditUserModel from '../modal/EditUserModel'
 const User = () => {
   const [users, setUsers] = useState([])
   const [limit, setLimit] = useState(20)
-  const [offset, setOffset] = useState(0)
+  const [maxPage, setMaxPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const createUserModalRef = useRef()
   const editUserModelRef = useRef()
@@ -31,9 +32,19 @@ const User = () => {
 
   useEffect(() => {
     getUsersData()
+  }, [currentPage])
+
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_HOST}/user/count`)
+      .then(res => {
+        const { countUsers } = res.data;
+        setMaxPage(Math.floor((countUsers + limit - 1) / limit))
+      })
   }, [])
 
   const getUsersData = () => {
+    const offset = (currentPage - 1) * limit
     axios
       .get(`${BACKEND_HOST}/user`, {
         params: {
@@ -41,22 +52,31 @@ const User = () => {
           offset,
         },
       })
-      .then((res) => {
-        const newUsers = res.data.users
-        setUsers(newUsers)
-      })
-      .catch((err) => {
-        console.log('Error while getting user', err)
-      })
+        .then((res) => {
+          const newUsers = res.data.users
+          setUsers(newUsers)
+        })
+        .catch((err) => {
+          console.log('Error while getting user', err)
+        })
   }
+
   const deleteUser = () => {}
+
   const openCreateUser = () => {
     createUserModalRef.current?.show()
   }
   const openEditUser = () => {
     editUserModelRef.current?.show()
   }
-  console.log(users)
+
+  const goToNextPage = () => {
+    setCurrentPage(currentPage + 1)
+  }
+
+  const goToPreviousPage = () => {
+    setCurrentPage(currentPage - 1)
+  }
 
   return (
     <CRow className="overflow-scroll">
@@ -97,12 +117,20 @@ const User = () => {
           })}
         </CTableBody>
       </CTable>
-      <CPagination aria-label="Page navigation example">
-        <CPaginationItem aria-label="Previous" disabled>
+      <CPagination
+        pages={10}
+        aria-label="Page navigation example">
+        <CPaginationItem
+          disabled={currentPage === 1}
+          onClick={goToPreviousPage}
+          aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </CPaginationItem>
-        <CPaginationItem>1</CPaginationItem>
-        <CPaginationItem aria-label="Next">
+        <CPaginationItem>{currentPage}</CPaginationItem>
+        <CPaginationItem
+          disabled={currentPage === maxPage}
+          onClick={goToNextPage}
+          aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </CPaginationItem>
       </CPagination>
