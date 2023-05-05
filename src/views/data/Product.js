@@ -22,7 +22,7 @@ import ProductCreateModel from '../modal/ProductCreateModel'
 import axios from 'axios'
 import { BACKEND_HOST } from 'src/constant'
 import Cookies from 'js-cookie'
-import { getFormatTime } from '../../ultils/index'
+import { getFormatTime } from '../../utils'
 import InforProductModal from '../modal/InforProductModal'
 
 export default function Product() {
