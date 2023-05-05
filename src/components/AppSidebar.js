@@ -27,7 +27,6 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
     >
-      <CImage src={Logo} />
       <CSidebarNav>
         <SimpleBar>
           <AppSidebarNav items={navigation} />
