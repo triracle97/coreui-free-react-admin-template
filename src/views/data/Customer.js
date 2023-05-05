@@ -17,7 +17,7 @@ import { BACKEND_HOST } from '../../constant'
 
 import CustomerCreateModel from '../modal/CustomerCreateModel'
 import Actions from './Actions'
-import FilterCustomerModal from '../modal/FilterCustomerModal';
+import FilterCustomerModal from '../modal/FilterCustomerModal'
 
 const Customer = () => {
   const [customer, setCustomer] = useState([])
@@ -60,12 +60,12 @@ const Customer = () => {
     axios
       .get(`${BACKEND_HOST}/customer/filter`, {
         params: {
-          ...filter
-        }
+          ...filter,
+        },
       })
       .then((res) => {
         if (res.data?.customers) {
-          setCustomer(res.data?.customers);
+          setCustomer(res.data?.customers)
         }
       })
   }
@@ -130,9 +130,7 @@ const Customer = () => {
         </CPaginationItem>
       </CPagination>
       <CustomerCreateModel ref={createUserModalRef} />
-      <FilterCustomerModal
-        handleSubmit={handleFilterSubmit}
-        ref={filterUserModalRef} />
+      <FilterCustomerModal handleSubmit={handleFilterSubmit} ref={filterUserModalRef} />
     </CRow>
   )
 }

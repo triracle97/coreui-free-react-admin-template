@@ -15,7 +15,7 @@ export default function DatTs({ data }) {
   const [ma_lo, setMa_lo] = useState('')
   const [tai_san_gan_lien, setTai_san_gan_lien] = useState('')
   const [dong_tien, setDong_tien] = useState('')
-  const [note_ht, setNote_ht] = useState('')
+
   const [ht_dat_o, setHt_dat_o] = useState('')
   const [ht_cln, setHt_cln] = useState('')
   const [ht_bhk, setHt_bhk] = useState('')
@@ -51,7 +51,7 @@ export default function DatTs({ data }) {
       ma_lo,
       tai_san_gan_lien,
       dong_tien,
-      note_ht,
+
       ht_dat_o,
       ht_cln,
       ht_bhk,
@@ -86,7 +86,7 @@ export default function DatTs({ data }) {
     ma_lo,
     tai_san_gan_lien,
     dong_tien,
-    note_ht,
+
     ht_dat_o,
     ht_cln,
     ht_bhk,
@@ -300,14 +300,6 @@ export default function DatTs({ data }) {
             value={qh_giao_thong}
             onChange={(e) => setQh_giao_thong(e.target.value)}
             placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>Note</CInputGroupText>
-          <CFormInput
-            value={note_ht}
-            onChange={(e) => setNote_ht(e.target.value)}
-            placeholder="note"
           />
         </CInputGroup>
       </div>

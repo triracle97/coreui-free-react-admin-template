@@ -86,7 +86,6 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
                 cong_cong: data.current.cong_cong,
                 qh_giao_thong: data.current.qh_giao_thong,
               },
-              note: data.current.note_ht,
             },
             dinh_vi: data.current.dinh_vi,
             gia_ban: data.current.gia_ban,
@@ -162,14 +161,14 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
               onChange={(e) => setKhu_vuc(e.target.value)}
             >
               <option>Chọn khu vực</option>
-              <option value="Đà Nẵng">Đà Nẵng</option>
-              <option value="Quảng Nam">Quảng Nam</option>
-              <option value="Khánh Hòa">Khánh Hòa</option>
-              <option value="Lâm Đồng">Lâm Đồng</option>
-              <option value="tp.HCM">TP.Hồ CHí Minh</option>
-              <option value="Đồng Nai">Đồng Nai</option>
-              <option value="Vũng Tàu">Vũng Tàu</option>
-              <option value="Kiên Giang">Kiên Giang</option>
+              <option value="da-nang">Đà Nẵng</option>
+              <option value="quang-nam">Quảng Nam</option>
+              <option value="khanh-hoa">Khánh Hòa</option>
+              <option value="lam-dong">Lâm Đồng</option>
+              <option value="tp-hcm">TP.Hồ CHí Minh</option>
+              <option value="dong-nai">Đồng Nai</option>
+              <option value="vung-tau">Vũng Tàu</option>
+              <option value="kien-giang">Kiên Giang</option>
               <option value="">Khác</option>
             </CFormSelect>
             {khu_vuc === '' ? (

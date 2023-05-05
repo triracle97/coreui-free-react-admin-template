@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import React, { useState, useImperativeHandle } from 'react'
+import React, { useState, useImperativeHandle, useEffect } from 'react'
 import {
   CButton,
   CModal,
@@ -20,23 +20,27 @@ import { cilLockLocked, cilUser, cilText } from '@coreui/icons'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 
-const EditUserModel = ({ item }, ref) => {
+const EditUserModel = ({}, ref) => {
   const [visible, setVisible] = useState(false)
-  const [username, setUsername] = useState(item.username)
-  const [name, setName] = useState(item.name)
-  const [password, setPassword] = useState(item.password)
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [data, setData] = useState({})
+  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
 
   useImperativeHandle(ref, () => ({
     show: () => {
       setVisible(true)
     },
+    passData: (item) => {
+      setData(item)
+    },
   }))
 
   const handleSubmit = () => {
     axios
-      .patch(`${BACKEND_HOST}/user/${item.id}`, {
+      .patch(`${BACKEND_HOST}/user/${data.id}`, {
         values: { name, username, password },
       })
       .then((res) => {
@@ -62,7 +66,7 @@ const EditUserModel = ({ item }, ref) => {
               <CIcon icon={cilUser} />
             </CInputGroupText>
             <CFormInput
-              value={username}
+              value={username || data.username}
               onChange={(event) => setUsername(event.target.value)}
               placeholder="Username"
               autoComplete="username"
@@ -86,7 +90,7 @@ const EditUserModel = ({ item }, ref) => {
             <CFormInput
               type="name"
               placeholder="Name"
-              value={name}
+              value={name || data.name}
               onChange={(event) => setName(event.target.value)}
             />
           </CInputGroup>

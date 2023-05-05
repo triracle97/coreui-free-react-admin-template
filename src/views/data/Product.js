@@ -2,6 +2,13 @@
 import {
   CButton,
   CCol,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CPagination,
+  CPaginationItem,
   CRow,
   CTable,
   CTableBody,
@@ -15,39 +22,74 @@ import ProductCreateModel from '../modal/ProductCreateModel'
 import axios from 'axios'
 import { BACKEND_HOST } from 'src/constant'
 import Cookies from 'js-cookie'
+import { getFormatTime } from '../../ultils/index'
+import InforProductModal from '../modal/InforProductModal'
 
 export default function Product() {
   const createProductModelRef = useRef()
+  const inforModalRef = useRef()
   const openCreateProduct = () => {
     createProductModelRef.current?.show()
   }
-  const [limit, setLimit] = useState(30)
-  const [offset, setOffset] = useState(0)
+  const openInforProduct = (item) => {
+    inforModalRef.current?.show()
+    inforModalRef.current?.passData(item)
+  }
+  const [limit, setLimit] = useState(20)
   const [products, setProducts] = useState([])
   const [role, setRole] = useState(Cookies.get('role'))
+  const [update, setUpdate] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [maxPage, setMaxPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     getProductsData()
+  }, [update, currentPage])
+  useEffect(() => {
+    axios.get(`${BACKEND_HOST}/product/count`).then((res) => {
+      const { countProducts } = res.data
+      console.log(res)
+      setMaxPage(Math.floor((countProducts + limit - 1) / limit))
+    })
   }, [])
   const getProductsData = () => {
     axios
       .get(`${BACKEND_HOST}/product`, {
         params: {
           limit,
-          offset,
         },
       })
       .then((res) => {
         const newProduct = res.data.products
-        console.log(res)
+
         setProducts(newProduct)
         console.log('success')
       })
       .catch((err) => {
         console.log('Error while getting Product', err)
       })
+    setUpdate(false)
   }
-
+  const changeStatus = (id, value) => {
+    axios
+      .patch(`${BACKEND_HOST}/product/${id}`, {
+        values: {
+          status: value,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+        console.log('Change Status', value)
+      })
+      .catch((err) => {
+        console.log('Error Change Status', err)
+      })
+    setUpdate(true)
+  }
+  const handleDelete = () => {
+    setVisible(!visible)
+  }
   const deleteProduct = (id) => {
     axios
       .delete(`${BACKEND_HOST}/product/${id}`, {
@@ -59,19 +101,16 @@ export default function Product() {
       .catch((err) => {
         console.log('Error', err)
       })
+    setUpdate(true)
+  }
+  const goToNextPage = () => {
+    setCurrentPage(currentPage + 1)
   }
 
-  function getFormatTime(time) {
-    const newTime = new Date(time)
-    const date = newTime.getDate() < 10 ? `${newTime.getDate()}` : newTime.getDate()
-    const month =
-      newTime.getMonth() + 1 < 10 ? `0${newTime.getMonth() + 1}` : newTime.getMonth() + 1
-    const year = newTime.getFullYear()
-    const hour = newTime.getHours()
-    const minute = newTime.getMinutes()
-    return `${hour}:${minute} ${date}/${month}/${year}`
+  const goToPreviousPage = () => {
+    setCurrentPage(currentPage - 1)
   }
-  console.log(products)
+
   return (
     <CRow>
       <CCol>
@@ -96,20 +135,42 @@ export default function Product() {
               <CTableDataCell>
                 {role === 'admin' ? (
                   <>
-                    <CButton color="success" className="mx-1">
+                    <CButton
+                      color="success"
+                      className="mx-1"
+                      onClick={() => changeStatus(p._id, 'approved')}
+                    >
                       Accept
                     </CButton>
-                    <CButton color="secondary" className="mx-1">
+                    <CButton
+                      color="secondary"
+                      className="mx-1"
+                      onClick={() => changeStatus(p._id, 'rejected')}
+                    >
                       Reject
                     </CButton>
                     <CButton
                       color="danger"
                       variant="outline"
                       className="mx-1"
-                      onClick={() => deleteProduct(p._id)}
+                      onClick={() => handleDelete(p._id)}
                     >
                       Delete
                     </CButton>
+                    <CModal visible={visible} onClose={() => setVisible(false)}>
+                      <CModalHeader onClose={() => setVisible(false)}>
+                        <CModalTitle>Cảnh báo</CModalTitle>
+                      </CModalHeader>
+                      <CModalBody>Bạn thực sự muốn xóa sản phẩm</CModalBody>
+                      <CModalFooter>
+                        <CButton color="primary" onClick={() => deleteProduct(p._id)}>
+                          Đúng
+                        </CButton>
+                        <CButton color="secondary" onClick={() => setVisible(false)}>
+                          Không
+                        </CButton>
+                      </CModalFooter>
+                    </CModal>
                   </>
                 ) : (
                   <></>
@@ -117,24 +178,60 @@ export default function Product() {
                 <CButton color="primary" className="mx-1">
                   Edit
                 </CButton>
+                <CButton color="info" className="mx-1" onClick={() => openInforProduct(p)}>
+                  Info
+                </CButton>
               </CTableDataCell>
               <CTableDataCell>{p.ten_san_pham}</CTableDataCell>
               <CTableDataCell>{p.loai_sp}</CTableDataCell>
               <CTableDataCell>{p.khu_vuc}</CTableDataCell>
               <CTableDataCell>{getFormatTime(p.created_at)}</CTableDataCell>
-              {role === 'admin' ? (
-                <CTableDataCell>
-                  <CButton color="danger" className="mx-1">
+
+              <CTableDataCell>
+                {p.status === 'pending' ? (
+                  <CButton color={'danger'} className="mx-1">
                     {p.status}
                   </CButton>
-                </CTableDataCell>
-              ) : (
-                <></>
-              )}
+                ) : (
+                  <></>
+                )}
+                {p.status === 'approved' ? (
+                  <CButton color={'success'} className="mx-1">
+                    {p.status}
+                  </CButton>
+                ) : (
+                  <></>
+                )}
+                {p.status === 'rejected' ? (
+                  <CButton color={'secondary  '} className="mx-1">
+                    {p.status}
+                  </CButton>
+                ) : (
+                  <></>
+                )}
+              </CTableDataCell>
             </CTableRow>
           ))}
+          <InforProductModal ref={inforModalRef}></InforProductModal>
         </CTableBody>
       </CTable>
+      <CPagination pages={10} aria-label="Page navigation example">
+        <CPaginationItem
+          disabled={currentPage === 1}
+          onClick={goToPreviousPage}
+          aria-label="Previous"
+        >
+          <span aria-hidden="true">&laquo;</span>
+        </CPaginationItem>
+        <CPaginationItem>{currentPage}</CPaginationItem>
+        <CPaginationItem
+          disabled={currentPage === maxPage}
+          onClick={goToNextPage}
+          aria-label="Next"
+        >
+          <span aria-hidden="true">&raquo;</span>
+        </CPaginationItem>
+      </CPagination>
       <ProductCreateModel ref={createProductModelRef} getProductsData={getProductsData} />
     </CRow>
   )

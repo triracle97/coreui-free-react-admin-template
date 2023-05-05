@@ -1,22 +1,14 @@
 import React from 'react'
-import {
-  CAvatar,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-} from '@coreui/react'
-import {
-  cilLockLocked,
-} from '@coreui/icons'
+import { CAvatar, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle } from '@coreui/react'
+import { cilLockLocked } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
 
 const AppHeaderDropdown = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const doLogOut = () => {
     Cookies.remove('authToken')

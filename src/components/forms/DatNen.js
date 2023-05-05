@@ -13,7 +13,7 @@ export default function DatNen({ data }) {
   const [so_to, setSo_to] = useState('')
   const [so_thua, setSo_thua] = useState('')
   const [ma_lo, setMa_lo] = useState('')
-  const [note_ht, setNote_ht] = useState('')
+
   const [ht_dat_o, setHt_dat_o] = useState('')
   const [ht_cln, setHt_cln] = useState('')
   const [ht_bhk, setHt_bhk] = useState('')
@@ -47,7 +47,7 @@ export default function DatNen({ data }) {
       so_to,
       so_thua,
       ma_lo,
-      note_ht,
+
       ht_dat_o,
       ht_cln,
       ht_bhk,
@@ -80,7 +80,7 @@ export default function DatNen({ data }) {
     so_to,
     so_thua,
     ma_lo,
-    note_ht,
+
     ht_dat_o,
     ht_cln,
     ht_bhk,
@@ -278,14 +278,6 @@ export default function DatNen({ data }) {
             value={qh_giao_thong}
             onChange={(e) => setQh_giao_thong(e.target.value)}
             placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>Note</CInputGroupText>
-          <CFormInput
-            value={note_ht}
-            onChange={(e) => setNote_ht(e.target.value)}
-            placeholder="note"
           />
         </CInputGroup>
       </div>

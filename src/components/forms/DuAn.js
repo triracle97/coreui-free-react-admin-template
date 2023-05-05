@@ -120,7 +120,7 @@ export default function DuAn({ data }) {
               style={{ width: '16px', height: '16px' }}
               className="mx-1"
               type="checkbox"
-              value="Đất nền"
+              value="chap_thuan_chu_truong_dau_tu"
               onChange={handle}
             />
             <label>Chấp thuận chủ trương đầu tư</label>
@@ -130,7 +130,7 @@ export default function DuAn({ data }) {
               style={{ width: '16px', height: '16px' }}
               className="mx-1"
               type="checkbox"
-              value="Đất lớn"
+              value="qui_hoach_1/500"
               onChange={handle}
             />
             <label>Quy hoạch 1/500</label>
@@ -140,7 +140,7 @@ export default function DuAn({ data }) {
               style={{ width: '16px', height: '16px' }}
               className="mx-1"
               type="checkbox"
-              value="BĐS trung tâm"
+              value="giao_dat&chuyen_muc_dich_sdd"
               onChange={handle}
             />
             <label>Giao đất chuyển mục đích sdđ</label>
@@ -150,27 +150,18 @@ export default function DuAn({ data }) {
               style={{ width: '16px', height: '16px' }}
               className="mx-1"
               type="checkbox"
-              value="BĐS dòng tiền"
+              value="hoan_thanh_nghia_vu_tai_chinh"
               onChange={handle}
             />
             <label>Hoàn thành nghĩa vụ tài chính</label>
           </div>
+
           <div className="input-group align-items-center  " style={{ maxWidth: '300px' }}>
             <input
               style={{ width: '16px', height: '16px' }}
               className="mx-1"
               type="checkbox"
-              value="Dự án"
-              onChange={handle}
-            />
-            <label>Chấp thuận chủ trương đầu tư</label>
-          </div>
-          <div className="input-group align-items-center  " style={{ maxWidth: '300px' }}>
-            <input
-              style={{ width: '16px', height: '16px' }}
-              className="mx-1"
-              type="checkbox"
-              value="Dự án"
+              value="giay_phep_xay_dung"
               onChange={handle}
             />
             <label>Giấy phép xây dựng</label>

@@ -13,9 +13,9 @@ export default function Actions({ openEditUser, item, getUsersData }) {
   const get = getUsersData
   const id = item.id
   function editUser() {
-    open()
-    console.log(item)
+    open(item)
   }
+
   const deleteUser = () => {
     axios
       .delete(`${BACKEND_HOST}/user/${id}`, {

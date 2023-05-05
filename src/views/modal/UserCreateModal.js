@@ -44,6 +44,9 @@ const UserCreateModal = ({ getUsersData }, ref) => {
       .then((res) => {
         setSuccess(true)
         get()
+        setName('')
+        setUsername('')
+        setPassword('')
       })
       .catch((err) => {
         console.log('Error', err)

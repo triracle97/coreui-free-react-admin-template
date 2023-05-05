@@ -35,12 +35,10 @@ const User = () => {
   }, [currentPage])
 
   useEffect(() => {
-    axios
-      .get(`${BACKEND_HOST}/user/count`)
-      .then(res => {
-        const { countUsers } = res.data;
-        setMaxPage(Math.floor((countUsers + limit - 1) / limit))
-      })
+    axios.get(`${BACKEND_HOST}/user/count`).then((res) => {
+      const { countUsers } = res.data
+      setMaxPage(Math.floor((countUsers + limit - 1) / limit))
+    })
   }, [])
 
   const getUsersData = () => {
@@ -52,22 +50,21 @@ const User = () => {
           offset,
         },
       })
-        .then((res) => {
-          const newUsers = res.data.users
-          setUsers(newUsers)
-        })
-        .catch((err) => {
-          console.log('Error while getting user', err)
-        })
+      .then((res) => {
+        const newUsers = res.data.users
+        setUsers(newUsers)
+      })
+      .catch((err) => {
+        console.log('Error while getting user', err)
+      })
   }
-
-  const deleteUser = () => {}
 
   const openCreateUser = () => {
     createUserModalRef.current?.show()
   }
-  const openEditUser = () => {
+  const openEditUser = (item) => {
     editUserModelRef.current?.show()
+    editUserModelRef.current?.passData(item)
   }
 
   const goToNextPage = () => {
@@ -95,42 +92,39 @@ const User = () => {
           </CTableRow>
         </CTableHead>
         <CTableBody>
-          {users.map((item, index) => {
+          {users.map((item) => {
             return (
-              <CTableRow key={index}>
+              <CTableRow key={item.id}>
                 <CTableDataCell style={{ width: '200px' }}>
-                  <Actions openEditUser={openEditUser} item={item} getUsersData={getUsersData} />
+                  <Actions
+                    openEditUser={() => openEditUser(item)}
+                    item={item}
+                    getUsersData={getUsersData}
+                  />
                 </CTableDataCell>
                 <CTableDataCell>{item.username}</CTableDataCell>
                 <CTableDataCell>{item.role}</CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
-                <EditUserModel
-                  item={item}
-                  id={item.id}
-                  username={item.username}
-                  name={item.name}
-                  password={item.password}
-                  ref={editUserModelRef}
-                />
               </CTableRow>
             )
           })}
+          <EditUserModel ref={editUserModelRef} />
         </CTableBody>
       </CTable>
-      <CPagination
-        pages={10}
-        aria-label="Page navigation example">
+      <CPagination pages={10} aria-label="Page navigation example">
         <CPaginationItem
           disabled={currentPage === 1}
           onClick={goToPreviousPage}
-          aria-label="Previous">
+          aria-label="Previous"
+        >
           <span aria-hidden="true">&laquo;</span>
         </CPaginationItem>
         <CPaginationItem>{currentPage}</CPaginationItem>
         <CPaginationItem
           disabled={currentPage === maxPage}
           onClick={goToNextPage}
-          aria-label="Next">
+          aria-label="Next"
+        >
           <span aria-hidden="true">&raquo;</span>
         </CPaginationItem>
       </CPagination>

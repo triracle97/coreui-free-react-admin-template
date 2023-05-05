@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 /* eslint-disable prettier/prettier */
@@ -17,16 +18,10 @@ import {
   CFormSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {
-  cilStar,
-  cilMoney,
-  cilArrowRight,
-} from '@coreui/icons'
+import { cilStar, cilMoney, cilArrowRight } from '@coreui/icons'
 import provinces_item from './Provinces.json'
 
-const FilterCustomerModal = ({
-  handleSubmit
-}, ref) => {
+const FilterCustomerModal = ({ handleSubmit }, ref) => {
   const [visible, setVisible] = useState(false)
   const [goodwill, setGoodWill] = useState(null)
   const [intimacy, setIntimacy] = useState(null)
@@ -69,19 +64,13 @@ const FilterCustomerModal = ({
   }))
 
   const onPressFilter = () => {
-    const filter = {};
-    if (goodwill)
-      filter.goodwill = goodwill
-    if (intimacy)
-      filter.intimacy = intimacy
-    if (minBudget)
-      filter.minBudget = minBudget
-    if (maxBudget)
-      filter.maxBudget = maxBudget
-    if (caringArea.length)
-      filter.caringArea = caringArea
-    if (caringProduct.length)
-      filter.caringProduct = caringProduct
+    const filter = {}
+    if (goodwill) filter.goodwill = goodwill
+    if (intimacy) filter.intimacy = intimacy
+    if (minBudget) filter.minBudget = minBudget
+    if (maxBudget) filter.maxBudget = maxBudget
+    if (caringArea.length) filter.caringArea = caringArea
+    if (caringProduct.length) filter.caringProduct = caringProduct
     handleSubmit(filter)
     setVisible(false)
   }
@@ -94,7 +83,9 @@ const FilterCustomerModal = ({
       <CModalBody>
         {error && <CAlert color="danger">{'Error'}</CAlert>}
         {success && <CAlert color="success">{'Done'}</CAlert>}
-        <CInputGroupText className={"mb-3"}>Trường nào không muốn filter có thể bỏ trống</CInputGroupText>
+        <CInputGroupText className={'mb-3'}>
+          Trường nào không muốn filter có thể bỏ trống
+        </CInputGroupText>
         <CForm>
           <CInputGroup className="mb-4">
             <CInputGroupText>
