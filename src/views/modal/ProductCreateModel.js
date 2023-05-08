@@ -64,17 +64,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
               ma_lo: data.current.ma_lo,
             },
             muc_dich_su_dung_dat: {
-              hien_trang: {
-                dat_o: data.current.ht_dat_o,
-                CLN: data.current.ht_cln,
-                BHK: data.current.ht_bhk,
-                LUC: data.current.ht_luc,
-                RSX: data.current.ht_rsx,
-                NTS: data.current.ht_nts,
-                TMD: data.current.ht_tmd,
-                cong_cong: data.current.ht_cong_cong,
-                qh_giao_thong: data.current.ht_qh_giao_thong,
-              },
+              hien_trang: data.current.hien_trang,
               qui_hoach: {
                 dat_o: data.current.dat_o,
                 CLN: data.current.cln,
@@ -130,8 +120,6 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
         <CModalTitle>Create Product</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        {error && <CAlert color="danger">{'Error'}</CAlert>}
-        {success && <CAlert color="success">{'Done'}</CAlert>}
         <CForm>
           <CInputGroup className="mb-3">
             <CInputGroupText>Nguồn</CInputGroupText>
@@ -211,6 +199,8 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
           {loai_sp.includes('datTs') ? <DatTs data={data} /> : <></>}
         </CForm>
       </CModalBody>
+      {error && <CAlert color="danger">{'Error'}</CAlert>}
+      {success && <CAlert color="success">{'Done'}</CAlert>}
       <CModalFooter>
         <CButton color="secondary" onClick={() => setVisible(false)}>
           Cancel

@@ -11,20 +11,11 @@ export default function DatTs({ data }) {
   const [phap_ly, setPhap_ly] = useState('')
   const [khac, setKhac] = useState('')
   const [so_to, setSo_to] = useState('')
-  const [so_thua, setSo_thua] = useState('')
+  const [so_thua, setSo_thua] = useState(1)
   const [ma_lo, setMa_lo] = useState('')
   const [tai_san_gan_lien, setTai_san_gan_lien] = useState('')
   const [dong_tien, setDong_tien] = useState('')
 
-  const [ht_dat_o, setHt_dat_o] = useState('')
-  const [ht_cln, setHt_cln] = useState('')
-  const [ht_bhk, setHt_bhk] = useState('')
-  const [ht_luc, setHt_luc] = useState('')
-  const [ht_rsx, setHt_rsx] = useState('')
-  const [ht_nts, setHt_nts] = useState('')
-  const [ht_tmd, setHt_tmd] = useState('')
-  const [ht_cong_cong, setHt_cong_cong] = useState('')
-  const [ht_qh_giao_thong, setHt_qh_giao_thong] = useState('')
   const [dat_o, setDat_o] = useState('')
   const [cln, setCln] = useState('')
   const [bhk, setBhk] = useState('')
@@ -52,16 +43,6 @@ export default function DatTs({ data }) {
       ma_lo,
       tai_san_gan_lien,
       dong_tien,
-
-      ht_dat_o,
-      ht_cln,
-      ht_bhk,
-      ht_luc,
-      ht_rsx,
-      ht_nts,
-      ht_tmd,
-      ht_cong_cong,
-      ht_qh_giao_thong,
       dat_o,
       cln,
       bhk,
@@ -78,6 +59,24 @@ export default function DatTs({ data }) {
       note,
       file_media_raw,
     }
+    data.current.hien_trang = []
+    for (let i = 0; i < so_thua; i++) {
+      data.current.hien_trang.push({
+        dat_o: 0,
+        CLN: 0,
+        BHK: 0,
+        LUC: 0,
+        RSX: 0,
+        NTS: 0,
+        TMD: 0,
+        cong_cong: 0,
+        qh_giao_thong: 0,
+      })
+    }
+    hien_trang.forEach(item => {
+      if (!item.thua || item.thua >= so_thua) return;
+      data.current.hien_trang[item.thua][item.loaiDat] = item.dienTich
+    })
   }, [
     tong_dien_tich,
     phap_ly,
@@ -87,16 +86,6 @@ export default function DatTs({ data }) {
     ma_lo,
     tai_san_gan_lien,
     dong_tien,
-
-    ht_dat_o,
-    ht_cln,
-    ht_bhk,
-    ht_luc,
-    ht_rsx,
-    ht_nts,
-    ht_tmd,
-    ht_cong_cong,
-    ht_qh_giao_thong,
     dat_o,
     cln,
     bhk,
@@ -112,10 +101,24 @@ export default function DatTs({ data }) {
     nguon,
     note,
     file_media_raw,
+    hien_trang
   ])
 
   const themHienTrang = () => {
     setHien_trang([...hien_trang, {}]);
+  }
+
+  const thayDoiSoThua = (soThuaMoi) => {
+    try {
+      soThuaMoi = parseInt(soThuaMoi)
+      if (!isNaN(soThuaMoi)) {
+        setSo_thua(soThuaMoi)
+      } else {
+        setSo_thua(1)
+      }
+    } catch {
+      setSo_thua(1)
+    }
   }
 
   const thayDoiThuaHienTrang = (thuaMoi, index) => {
@@ -127,7 +130,14 @@ export default function DatTs({ data }) {
 
   const thayDoiLoaiDatHienTrang = (loaiDat, index) => {
     setHien_trang(oldValue => {
-      oldValue[index].loaiDat = thuaMoi
+      oldValue[index].loaiDat = loaiDat
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiDienTich = (dienTich, index) => {
+    setHien_trang(oldValue => {
+      oldValue[index].dienTich = dienTich
       return [...oldValue]
     })
   }
@@ -184,8 +194,7 @@ export default function DatTs({ data }) {
           <CFormInput placeholder="Nhập số tờ" />
           <CInputGroupText>Số thửa</CInputGroupText>
           <CFormInput
-            value={so_thua}
-            onChange={(e) => setSo_thua(e.target.value)}
+            onChange={(e) => thayDoiSoThua(e.target.value)}
             placeholder="Nhập số thửa"
           />
         </CInputGroup>
@@ -214,11 +223,11 @@ export default function DatTs({ data }) {
         </p>
         {hien_trang.map((item, index) => {
           return (
-            <CInputGroup className="mb-3">
+            <CInputGroup key={index} className="mb-3">
               <CFormSelect
                 onChange={(e) => thayDoiThuaHienTrang(e.target.value, index)}>
                 <option>Thửa số</option>
-                {Array(so_thua).map((item, index) => {
+                {Array.from(Array(so_thua).keys()).map((item, index) => {
                   return (
                     <option key={index} value={index}>
                       {index + 1}
@@ -228,8 +237,8 @@ export default function DatTs({ data }) {
               </CFormSelect>
               <CFormSelect
                 onChange={(e) => thayDoiLoaiDatHienTrang(e.target.value, index)}>
-                <option value={'dat_o'}>Đất ở(m2)</option>
                 <option>Hiện trạng</option>
+                <option value={'dat_o'}>Đất ở(m2)</option>
                 <option>CLN(m2)</option>
                 <option>BHK(m2)</option>
                 <option>LUC(m2)</option>
@@ -240,7 +249,7 @@ export default function DatTs({ data }) {
                 <option>QH giao thông(m2)</option>
               </CFormSelect>
               <CFormInput
-                onChange={(e) => setDat_o(e.target.value)}
+                onChange={(e) => thayDoiDienTich(e.target.value, index)}
                 placeholder="Nhập số"
               />
             </CInputGroup>
