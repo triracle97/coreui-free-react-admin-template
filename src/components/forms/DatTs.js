@@ -40,6 +40,7 @@ export default function DatTs({ data }) {
   const [nguon, setNguon] = useState('')
   const [note, setNote] = useState('')
   const [file_media_raw, setFile_media_raw] = useState('')
+  const [hien_trang, setHien_trang] = useState([]);
 
   useEffect(() => {
     data.current = {
@@ -112,6 +113,24 @@ export default function DatTs({ data }) {
     note,
     file_media_raw,
   ])
+
+  const themHienTrang = () => {
+    setHien_trang([...hien_trang, {}]);
+  }
+
+  const thayDoiThuaHienTrang = (thuaMoi, index) => {
+    setHien_trang(oldValue => {
+      oldValue[index].thua = thuaMoi
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiLoaiDatHienTrang = (loaiDat, index) => {
+    setHien_trang(oldValue => {
+      oldValue[index].loaiDat = thuaMoi
+      return [...oldValue]
+    })
+  }
 
   return (
     <>
@@ -193,70 +212,45 @@ export default function DatTs({ data }) {
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
           Hiện trạng
         </p>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>Đất ở(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_dat_o}
-            onChange={(e) => setHt_dat_o(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>CLN(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_cln}
-            onChange={(e) => setHt_cln(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>BHK(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_bhk}
-            onChange={(e) => setHt_bhk(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>LUC(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_luc}
-            onChange={(e) => setHt_luc(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>RSX(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_rsx}
-            onChange={(e) => setHt_rsx(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>NTS(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_nts}
-            onChange={(e) => setHt_nts(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>TMD(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_tmd}
-            onChange={(e) => setHt_tmd(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>Công cộng(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_cong_cong}
-            onChange={(e) => setHt_cong_cong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>QH giao thông(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_qh_giao_thong}
-            onChange={(e) => setHt_qh_giao_thong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
+        {hien_trang.map((item, index) => {
+          return (
+            <CInputGroup className="mb-3">
+              <CFormSelect
+                onChange={(e) => thayDoiThuaHienTrang(e.target.value, index)}>
+                <option>Thửa số</option>
+                {Array(so_thua).map((item, index) => {
+                  return (
+                    <option key={index} value={index}>
+                      {index + 1}
+                    </option>
+                  )
+                })}
+              </CFormSelect>
+              <CFormSelect
+                onChange={(e) => thayDoiLoaiDatHienTrang(e.target.value, index)}>
+                <option value={'dat_o'}>Đất ở(m2)</option>
+                <option>Hiện trạng</option>
+                <option>CLN(m2)</option>
+                <option>BHK(m2)</option>
+                <option>LUC(m2)</option>
+                <option>RSX(m2)</option>
+                <option>NTS(m2)</option>
+                <option>TMD(m2)</option>
+                <option>Công cộng(m2)</option>
+                <option>QH giao thông(m2)</option>
+              </CFormSelect>
+              <CFormInput
+                onChange={(e) => setDat_o(e.target.value)}
+                placeholder="Nhập số"
+              />
+            </CInputGroup>
+          )
+        })}
+        <CButton
+          onClick={themHienTrang}
+          color="warning">
+          Thêm
+        </CButton>
       </div>
       <div className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
