@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import { CButton, CFormInput, CFormSelect, CInputGroup, CInputGroupText } from '@coreui/react'
+import { CButton, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CListGroup } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
 export default function DatTs({ data }) {
@@ -16,22 +16,14 @@ export default function DatTs({ data }) {
   const [tai_san_gan_lien, setTai_san_gan_lien] = useState('')
   const [dong_tien, setDong_tien] = useState('')
 
-  const [dat_o, setDat_o] = useState('')
-  const [cln, setCln] = useState('')
-  const [bhk, setBhk] = useState('')
-  const [luc, setLuc] = useState('')
-  const [rsx, setRsx] = useState('')
-  const [nts, setNts] = useState('')
-  const [tmd, setTmd] = useState('')
-  const [cong_cong, setCong_cong] = useState('')
-  const [qh_giao_thong, setQh_giao_thong] = useState('')
   const [dinh_vi, setDinh_vi] = useState('')
   const [gia_ban, setGia_ban] = useState('')
   const [hoa_hong, setHoa_hong] = useState('')
   const [nguon, setNguon] = useState('')
   const [note, setNote] = useState('')
   const [file_media_raw, setFile_media_raw] = useState('')
-  const [hien_trang, setHien_trang] = useState([]);
+  const [hien_trang, setHien_trang] = useState([])
+  const [quy_hoach, setQuy_hoach] = useState([])
 
   useEffect(() => {
     data.current = {
@@ -43,15 +35,6 @@ export default function DatTs({ data }) {
       ma_lo,
       tai_san_gan_lien,
       dong_tien,
-      dat_o,
-      cln,
-      bhk,
-      luc,
-      rsx,
-      nts,
-      tmd,
-      cong_cong,
-      qh_giao_thong,
       dinh_vi,
       gia_ban,
       hoa_hong,
@@ -60,8 +43,9 @@ export default function DatTs({ data }) {
       file_media_raw,
     }
     data.current.hien_trang = []
+    data.current.quy_hoach = []
     for (let i = 0; i < so_thua; i++) {
-      data.current.hien_trang.push({
+      const defaultObj = {
         dat_o: 0,
         CLN: 0,
         BHK: 0,
@@ -71,12 +55,18 @@ export default function DatTs({ data }) {
         TMD: 0,
         cong_cong: 0,
         qh_giao_thong: 0,
-      })
+      }
+      data.current.hien_trang.push(defaultObj)
+      data.current.quy_hoach.push(defaultObj)
     }
     hien_trang.forEach(item => {
       if (!item.thua || item.thua >= so_thua) return;
       data.current.hien_trang[item.thua][item.loaiDat] = item.dienTich
     })
+    quy_hoach.forEach((item => {
+      if (!item.thua || item.thua >= so_thua) return;
+      data.current.quy_hoach[item.thua][item.loaiDat] = item.dienTich
+    }))
   }, [
     tong_dien_tich,
     phap_ly,
@@ -86,26 +76,40 @@ export default function DatTs({ data }) {
     ma_lo,
     tai_san_gan_lien,
     dong_tien,
-    dat_o,
-    cln,
-    bhk,
-    luc,
-    rsx,
-    nts,
-    tmd,
-    cong_cong,
-    qh_giao_thong,
     dinh_vi,
     gia_ban,
     hoa_hong,
     nguon,
     note,
     file_media_raw,
-    hien_trang
+    hien_trang,
+    quy_hoach
   ])
 
   const themHienTrang = () => {
     setHien_trang([...hien_trang, {}]);
+  }
+
+  const themQuyHoach = () => {
+    setQuy_hoach([...quy_hoach, {}]);
+  }
+
+  const xoaHienTrang = (index) => {
+    setTimeout(() => {
+      setHien_trang(oldValue => {
+        oldValue.splice(index, 1)
+        return [...oldValue]
+      })
+    }, 100)
+  }
+
+  const xoaQuyHoach = (index) => {
+    setTimeout(() => {
+      setQuy_hoach(oldValue => {
+        oldValue.splice(index, 1)
+        return [...oldValue]
+      })
+    }, 100)
   }
 
   const thayDoiSoThua = (soThuaMoi) => {
@@ -137,6 +141,27 @@ export default function DatTs({ data }) {
 
   const thayDoiDienTich = (dienTich, index) => {
     setHien_trang(oldValue => {
+      oldValue[index].dienTich = dienTich
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiSoThuaQHSDD = (thuaMoi, index) => {
+    setQuy_hoach(oldValue => {
+      oldValue[index].thua = thuaMoi
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiLoaiDatQHSDD = (loaiDat, index) => {
+    setQuy_hoach(oldValue => {
+      oldValue[index].loaiDat = loaiDat
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiDienTichQHSDD = (dienTich, index) => {
+    setQuy_hoach(oldValue => {
       oldValue[index].dienTich = dienTich
       return [...oldValue]
     })
@@ -217,7 +242,7 @@ export default function DatTs({ data }) {
           placeholder=""
         />
       </CInputGroup>
-      <div className="border border-dark p-1 mb-1">
+      <CListGroup className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
           Hiện trạng
         </p>
@@ -239,19 +264,22 @@ export default function DatTs({ data }) {
                 onChange={(e) => thayDoiLoaiDatHienTrang(e.target.value, index)}>
                 <option>Hiện trạng</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
-                <option>CLN(m2)</option>
-                <option>BHK(m2)</option>
-                <option>LUC(m2)</option>
-                <option>RSX(m2)</option>
-                <option>NTS(m2)</option>
-                <option>TMD(m2)</option>
-                <option>Công cộng(m2)</option>
-                <option>QH giao thông(m2)</option>
+                <option value={'cln'}>CLN(m2)</option>
+                <option value={'bhk'}>BHK(m2)</option>
+                <option value={'luc'}>LUC(m2)</option>
+                <option value={'rsx'}>RSX(m2)</option>
+                <option value={'nts'}>NTS(m2)</option>
+                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'cong_cong'}>Công cộng(m2)</option>
+                <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
               <CFormInput
                 onChange={(e) => thayDoiDienTich(e.target.value, index)}
                 placeholder="Nhập số"
               />
+              <CButton color={'danger'} onClick={() => xoaHienTrang(index)}>
+                X
+              </CButton>
             </CInputGroup>
           )
         })}
@@ -260,52 +288,54 @@ export default function DatTs({ data }) {
           color="warning">
           Thêm
         </CButton>
-      </div>
-      <div className="border border-dark p-1 mb-1">
+      </CListGroup>
+      <CListGroup className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
           QH Sử dụng đất
         </p>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>Đất ở(m2)</CInputGroupText>
-          <CFormInput
-            value={dat_o}
-            onChange={(e) => setDat_o(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>CLN(m2)</CInputGroupText>
-          <CFormInput value={cln} onChange={(e) => setCln(e.target.value)} placeholder="Nhập số" />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>BHK(m2)</CInputGroupText>
-          <CFormInput value={bhk} onChange={(e) => setBhk(e.target.value)} placeholder="Nhập số" />
-          <CInputGroupText>LUC(m2)</CInputGroupText>
-          <CFormInput value={luc} onChange={(e) => setLuc(e.target.value)} placeholder="Nhập số" />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>RSX(m2)</CInputGroupText>
-          <CFormInput value={rsx} onChange={(e) => setRsx(e.target.value)} placeholder="Nhập số" />
-          <CInputGroupText>NTS(m2)</CInputGroupText>
-          <CFormInput value={nts} onChange={(e) => setNts(e.target.value)} placeholder="Nhập số" />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>TMD(m2)</CInputGroupText>
-          <CFormInput value={tmd} onChange={(e) => setTmd(e.target.value)} placeholder="Nhập số" />
-          <CInputGroupText>Công cộng(m2)</CInputGroupText>
-          <CFormInput
-            value={cong_cong}
-            onChange={(e) => setCong_cong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>QH giao thông(m2)</CInputGroupText>
-          <CFormInput
-            value={qh_giao_thong}
-            onChange={(e) => setQh_giao_thong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-      </div>
+        {quy_hoach.map((item, index) => {
+          return (
+            <CInputGroup key={index} className="mb-3">
+              <CFormSelect
+                onChange={(e) => thayDoiSoThuaQHSDD(e.target.value, index)}>
+                <option>Thửa số</option>
+                {Array.from(Array(so_thua).keys()).map((item, index) => {
+                  return (
+                    <option key={index} value={index}>
+                      {index + 1}
+                    </option>
+                  )
+                })}
+              </CFormSelect>
+              <CFormSelect
+                onChange={(e) => thayDoiLoaiDatQHSDD(e.target.value, index)}>
+                <option>QHSDD</option>
+                <option value={'dat_o'}>Đất ở(m2)</option>
+                <option value={'cln'}>CLN(m2)</option>
+                <option value={'bhk'}>BHK(m2)</option>
+                <option value={'luc'}>LUC(m2)</option>
+                <option value={'rsx'}>RSX(m2)</option>
+                <option value={'nts'}>NTS(m2)</option>
+                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'cong_cong'}>Công cộng(m2)</option>
+                <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
+              </CFormSelect>
+              <CFormInput
+                onChange={(e) => thayDoiDienTichQHSDD(e.target.value, index)}
+                placeholder="Nhập số"
+              />
+              <CButton color={'danger'} onClick={() => xoaQuyHoach(index)}>
+                X
+              </CButton>
+            </CInputGroup>
+          )
+        })}
+        <CButton
+          onClick={themQuyHoach}
+          color="warning">
+          Thêm
+        </CButton>
+      </CListGroup>
       <CInputGroup className="mb-2">
         <CInputGroupText>Định vị</CInputGroupText>
         <CFormInput

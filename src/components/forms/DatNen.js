@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import { CButton, CFormInput, CFormSelect, CInputGroup, CInputGroupText } from '@coreui/react'
+import { CButton, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CListGroup } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
 export default function DatNen({ data }) {
@@ -14,30 +14,14 @@ export default function DatNen({ data }) {
   const [so_thua, setSo_thua] = useState('')
   const [ma_lo, setMa_lo] = useState('')
 
-  const [ht_dat_o, setHt_dat_o] = useState('')
-  const [ht_cln, setHt_cln] = useState('')
-  const [ht_bhk, setHt_bhk] = useState('')
-  const [ht_luc, setHt_luc] = useState('')
-  const [ht_rsx, setHt_rsx] = useState('')
-  const [ht_nts, setHt_nts] = useState('')
-  const [ht_tmd, setHt_tmd] = useState('')
-  const [ht_cong_cong, setHt_cong_cong] = useState('')
-  const [ht_qh_giao_thong, setHt_qh_giao_thong] = useState('')
-  const [dat_o, setDat_o] = useState('')
-  const [cln, setCln] = useState('')
-  const [bhk, setBhk] = useState('')
-  const [luc, setLuc] = useState('')
-  const [rsx, setRsx] = useState('')
-  const [nts, setNts] = useState('')
-  const [tmd, setTmd] = useState('')
-  const [cong_cong, setCong_cong] = useState('')
-  const [qh_giao_thong, setQh_giao_thong] = useState('')
   const [dinh_vi, setDinh_vi] = useState('')
   const [gia_ban, setGia_ban] = useState('')
   const [hoa_hong, setHoa_hong] = useState('')
   const [nguon, setNguon] = useState('')
   const [note, setNote] = useState('')
   const [file_media_raw, setFile_media_raw] = useState('')
+  const [hien_trang, setHien_trang] = useState([])
+  const [quy_hoach, setQuy_hoach] = useState([])
 
   useEffect(() => {
     data.current = {
@@ -47,25 +31,6 @@ export default function DatNen({ data }) {
       so_to,
       so_thua,
       ma_lo,
-
-      ht_dat_o,
-      ht_cln,
-      ht_bhk,
-      ht_luc,
-      ht_rsx,
-      ht_nts,
-      ht_tmd,
-      ht_cong_cong,
-      ht_qh_giao_thong,
-      dat_o,
-      cln,
-      bhk,
-      luc,
-      rsx,
-      nts,
-      tmd,
-      cong_cong,
-      qh_giao_thong,
       dinh_vi,
       gia_ban,
       hoa_hong,
@@ -73,6 +38,31 @@ export default function DatNen({ data }) {
       note,
       file_media_raw,
     }
+    data.current.hien_trang = []
+    data.current.quy_hoach = []
+    for (let i = 0; i < so_thua; i++) {
+      const defaultObj = {
+        dat_o: 0,
+        CLN: 0,
+        BHK: 0,
+        LUC: 0,
+        RSX: 0,
+        NTS: 0,
+        TMD: 0,
+        cong_cong: 0,
+        qh_giao_thong: 0,
+      }
+      data.current.hien_trang.push(defaultObj)
+      data.current.quy_hoach.push(defaultObj)
+    }
+    hien_trang.forEach(item => {
+      if (!item.thua || item.thua >= so_thua) return;
+      data.current.hien_trang[item.thua][item.loaiDat] = item.dienTich
+    })
+    quy_hoach.forEach((item => {
+      if (!item.thua || item.thua >= so_thua) return;
+      data.current.quy_hoach[item.thua][item.loaiDat] = item.dienTich
+    }))
   }, [
     tong_dien_tich,
     phap_ly,
@@ -80,32 +70,96 @@ export default function DatNen({ data }) {
     so_to,
     so_thua,
     ma_lo,
-
-    ht_dat_o,
-    ht_cln,
-    ht_bhk,
-    ht_luc,
-    ht_rsx,
-    ht_nts,
-    ht_tmd,
-    ht_cong_cong,
-    ht_qh_giao_thong,
-    dat_o,
-    cln,
-    bhk,
-    luc,
-    rsx,
-    nts,
-    tmd,
-    cong_cong,
-    qh_giao_thong,
     dinh_vi,
     gia_ban,
     hoa_hong,
     nguon,
     note,
     file_media_raw,
+    hien_trang,
+    quy_hoach
   ])
+
+  const themHienTrang = () => {
+    setHien_trang([...hien_trang, {}]);
+  }
+
+  const themQuyHoach = () => {
+    setQuy_hoach([...quy_hoach, {}]);
+  }
+
+  const xoaHienTrang = (index) => {
+    setTimeout(() => {
+      setHien_trang(oldValue => {
+        oldValue.splice(index, 1)
+        return [...oldValue]
+      })
+    }, 100)
+  }
+
+  const xoaQuyHoach = (index) => {
+    setTimeout(() => {
+      setQuy_hoach(oldValue => {
+        oldValue.splice(index, 1)
+        return [...oldValue]
+      })
+    }, 100)
+  }
+
+  const thayDoiSoThua = (soThuaMoi) => {
+    try {
+      soThuaMoi = parseInt(soThuaMoi)
+      if (!isNaN(soThuaMoi)) {
+        setSo_thua(soThuaMoi)
+      } else {
+        setSo_thua(1)
+      }
+    } catch {
+      setSo_thua(1)
+    }
+  }
+
+  const thayDoiThuaHienTrang = (thuaMoi, index) => {
+    setHien_trang(oldValue => {
+      oldValue[index].thua = thuaMoi
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiLoaiDatHienTrang = (loaiDat, index) => {
+    setHien_trang(oldValue => {
+      oldValue[index].loaiDat = loaiDat
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiDienTich = (dienTich, index) => {
+    setHien_trang(oldValue => {
+      oldValue[index].dienTich = dienTich
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiSoThuaQHSDD = (thuaMoi, index) => {
+    setQuy_hoach(oldValue => {
+      oldValue[index].thua = thuaMoi
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiLoaiDatQHSDD = (loaiDat, index) => {
+    setQuy_hoach(oldValue => {
+      oldValue[index].loaiDat = loaiDat
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiDienTichQHSDD = (dienTich, index) => {
+    setQuy_hoach(oldValue => {
+      oldValue[index].dienTich = dienTich
+      return [...oldValue]
+    })
+  }
 
   return (
     <>
@@ -160,127 +214,107 @@ export default function DatNen({ data }) {
           <CInputGroupText>Số thửa</CInputGroupText>
           <CFormInput
             value={so_thua}
-            onChange={(e) => setSo_thua(e.target.value)}
+            onChange={(e) => thayDoiSoThua(e.target.value)}
             placeholder="Nhập số thửa"
           />
         </CInputGroup>
       ) : (
         <></>
       )}
-      <div className="border border-dark p-1 mb-1">
+      <CListGroup className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
           Hiện trạng
         </p>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>Đất ở(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_dat_o}
-            onChange={(e) => setHt_dat_o(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>CLN(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_cln}
-            onChange={(e) => setHt_cln(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>BHK(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_bhk}
-            onChange={(e) => setHt_bhk(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>LUC(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_luc}
-            onChange={(e) => setHt_luc(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>RSX(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_rsx}
-            onChange={(e) => setHt_rsx(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>NTS(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_nts}
-            onChange={(e) => setHt_nts(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>TMD(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_tmd}
-            onChange={(e) => setHt_tmd(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>Công cộng(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_cong_cong}
-            onChange={(e) => setHt_cong_cong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>QH giao thông(m2)</CInputGroupText>
-          <CFormInput
-            value={ht_qh_giao_thong}
-            onChange={(e) => setHt_qh_giao_thong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-      </div>
-      <div className="border border-dark p-1 mb-1">
+        {hien_trang.map((item, index) => {
+          return (
+            <CInputGroup key={index} className="mb-3">
+              <CFormSelect
+                onChange={(e) => thayDoiThuaHienTrang(e.target.value, index)}>
+                <option>Thửa số</option>
+                {Array.from(Array(so_thua).keys()).map((item, index) => {
+                  return (
+                    <option key={index} value={index}>
+                      {index + 1}
+                    </option>
+                  )
+                })}
+              </CFormSelect>
+              <CFormSelect
+                onChange={(e) => thayDoiLoaiDatHienTrang(e.target.value, index)}>
+                <option>Hiện trạng</option>
+                <option value={'dat_o'}>Đất ở(m2)</option>
+                <option value={'cln'}>CLN(m2)</option>
+                <option value={'bhk'}>BHK(m2)</option>
+                <option value={'luc'}>LUC(m2)</option>
+                <option value={'rsx'}>RSX(m2)</option>
+                <option value={'nts'}>NTS(m2)</option>
+                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'cong_cong'}>Công cộng(m2)</option>
+                <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
+              </CFormSelect>
+              <CFormInput
+                onChange={(e) => thayDoiDienTich(e.target.value, index)}
+                placeholder="Nhập số"
+              />
+              <CButton color={'danger'} onClick={() => xoaHienTrang(index)}>
+                X
+              </CButton>
+            </CInputGroup>
+          )
+        })}
+        <CButton
+          onClick={themHienTrang}
+          color="warning">
+          Thêm
+        </CButton>
+      </CListGroup>
+      <CListGroup className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
           QH Sử dụng đất
         </p>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>Đất ở(m2)</CInputGroupText>
-          <CFormInput
-            value={dat_o}
-            onChange={(e) => setDat_o(e.target.value)}
-            placeholder="Nhập số"
-          />
-          <CInputGroupText>CLN(m2)</CInputGroupText>
-          <CFormInput value={cln} onChange={(e) => setCln(e.target.value)} placeholder="Nhập số" />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>BHK(m2)</CInputGroupText>
-          <CFormInput value={bhk} onChange={(e) => setBhk(e.target.value)} placeholder="Nhập số" />
-          <CInputGroupText>LUC(m2)</CInputGroupText>
-          <CFormInput value={luc} onChange={(e) => setLuc(e.target.value)} placeholder="Nhập số" />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>RSX(m2)</CInputGroupText>
-          <CFormInput value={rsx} onChange={(e) => setRsx(e.target.value)} placeholder="Nhập số" />
-          <CInputGroupText>NTS(m2)</CInputGroupText>
-          <CFormInput value={nts} onChange={(e) => setNts(e.target.value)} placeholder="Nhập số" />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>TMD(m2)</CInputGroupText>
-          <CFormInput value={tmd} onChange={(e) => setTmd(e.target.value)} placeholder="Nhập số" />
-          <CInputGroupText>Công cộng(m2)</CInputGroupText>
-          <CFormInput
-            value={cong_cong}
-            onChange={(e) => setCong_cong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-        <CInputGroup className="mb-2">
-          <CInputGroupText>QH giao thông(m2)</CInputGroupText>
-          <CFormInput
-            value={qh_giao_thong}
-            onChange={(e) => setQh_giao_thong(e.target.value)}
-            placeholder="Nhập số"
-          />
-        </CInputGroup>
-      </div>
+        {quy_hoach.map((item, index) => {
+          return (
+            <CInputGroup key={index} className="mb-3">
+              <CFormSelect
+                onChange={(e) => thayDoiSoThuaQHSDD(e.target.value, index)}>
+                <option>Thửa số</option>
+                {Array.from(Array(so_thua).keys()).map((item, index) => {
+                  return (
+                    <option key={index} value={index}>
+                      {index + 1}
+                    </option>
+                  )
+                })}
+              </CFormSelect>
+              <CFormSelect
+                onChange={(e) => thayDoiLoaiDatQHSDD(e.target.value, index)}>
+                <option>QHSDD</option>
+                <option value={'dat_o'}>Đất ở(m2)</option>
+                <option value={'cln'}>CLN(m2)</option>
+                <option value={'bhk'}>BHK(m2)</option>
+                <option value={'luc'}>LUC(m2)</option>
+                <option value={'rsx'}>RSX(m2)</option>
+                <option value={'nts'}>NTS(m2)</option>
+                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'cong_cong'}>Công cộng(m2)</option>
+                <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
+              </CFormSelect>
+              <CFormInput
+                onChange={(e) => thayDoiDienTichQHSDD(e.target.value, index)}
+                placeholder="Nhập số"
+              />
+              <CButton color={'danger'} onClick={() => xoaQuyHoach(index)}>
+                X
+              </CButton>
+            </CInputGroup>
+          )
+        })}
+        <CButton
+          onClick={themQuyHoach}
+          color="warning">
+          Thêm
+        </CButton>
+      </CListGroup>
       <CInputGroup className="mb-2">
         <CInputGroupText>Định vị</CInputGroupText>
         <CFormInput

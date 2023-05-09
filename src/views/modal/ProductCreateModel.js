@@ -65,17 +65,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
             },
             muc_dich_su_dung_dat: {
               hien_trang: data.current.hien_trang,
-              qui_hoach: {
-                dat_o: data.current.dat_o,
-                CLN: data.current.cln,
-                BHK: data.current.bhk,
-                LUC: data.current.luc,
-                RSX: data.current.rsx,
-                NTS: data.current.nts,
-                TMD: data.current.tmd,
-                cong_cong: data.current.cong_cong,
-                qh_giao_thong: data.current.qh_giao_thong,
-              },
+              quy_hoach: data.current.quy_hoach,
             },
             dinh_vi: data.current.dinh_vi,
             gia_ban: data.current.gia_ban,
@@ -104,7 +94,6 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
         },
       })
       .then((res) => {
-        console.log(res)
         setSuccess(true)
         getProductsData()
       })
