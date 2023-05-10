@@ -63,10 +63,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
               so_thua: data.current.so_thua,
               ma_lo: data.current.ma_lo,
             },
-            muc_dich_su_dung_dat: {
-              hien_trang: data.current.hien_trang,
-              quy_hoach: data.current.quy_hoach,
-            },
+            du_lieu_thua: data.current.du_lieu_thua,
             dinh_vi: data.current.dinh_vi,
             gia_ban: data.current.gia_ban,
             hoa_hong: data.current.hoa_hong,
@@ -96,6 +93,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
       .then((res) => {
         setSuccess(true)
         getProductsData()
+        console.log(res)
       })
       .catch((err) => {
         console.log('Error', err)
@@ -104,7 +102,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
   }
 
   return (
-    <CModal visible={visible} onClose={() => setVisible(false)}>
+    <CModal size="xl" visible={visible} onClose={() => setVisible(false)}>
       <CModalHeader closeButton>
         <CModalTitle>Create Product</CModalTitle>
       </CModalHeader>
@@ -148,7 +146,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
               <option value="kien-giang">Kiên Giang</option>
               <option value="">Khác</option>
             </CFormSelect>
-            {khu_vuc === '' ? (
+            {/* {khu_vuc === '' ? (
               <CFormInput
                 type="text"
                 value={khu_vuc_khac}
@@ -157,7 +155,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
               />
             ) : (
               <></>
-            )}
+            )} */}
           </CInputGroup>
           <CInputGroup className="mb-3">
             <CInputGroupText>Địa chỉ</CInputGroupText>

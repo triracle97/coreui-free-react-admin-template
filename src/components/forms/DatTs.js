@@ -3,7 +3,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import { CButton, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CListGroup } from '@coreui/react'
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CInputGroup,
+  CInputGroupText,
+  CListGroup,
+} from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
 export default function DatTs({ data }) {
@@ -13,8 +20,8 @@ export default function DatTs({ data }) {
   const [so_to, setSo_to] = useState('')
   const [so_thua, setSo_thua] = useState(1)
   const [ma_lo, setMa_lo] = useState('')
-  const [tai_san_gan_lien, setTai_san_gan_lien] = useState('')
   const [dong_tien, setDong_tien] = useState('')
+  const [du_lieu_thua, setDu_lieu_thua] = useState([])
 
   const [dinh_vi, setDinh_vi] = useState('')
   const [gia_ban, setGia_ban] = useState('')
@@ -22,8 +29,6 @@ export default function DatTs({ data }) {
   const [nguon, setNguon] = useState('')
   const [note, setNote] = useState('')
   const [file_media_raw, setFile_media_raw] = useState('')
-  const [hien_trang, setHien_trang] = useState([])
-  const [quy_hoach, setQuy_hoach] = useState([])
 
   useEffect(() => {
     data.current = {
@@ -33,7 +38,7 @@ export default function DatTs({ data }) {
       so_to,
       so_thua,
       ma_lo,
-      tai_san_gan_lien,
+      du_lieu_thua,
       dong_tien,
       dinh_vi,
       gia_ban,
@@ -42,31 +47,35 @@ export default function DatTs({ data }) {
       note,
       file_media_raw,
     }
-    data.current.hien_trang = []
-    data.current.quy_hoach = []
-    for (let i = 0; i < so_thua; i++) {
+    data.current.du_lieu_thua = []
+
+    for (let i = 0; i < du_lieu_thua.length; i++) {
       const defaultObj = {
-        dat_o: 0,
-        CLN: 0,
-        BHK: 0,
-        LUC: 0,
-        RSX: 0,
-        NTS: 0,
-        TMD: 0,
-        cong_cong: 0,
-        qh_giao_thong: 0,
+        tai_san_gan_lien: '',
+        thua_dat_so: '',
+        to_ban_do_so: '',
+        hien_trang: {},
+        quy_hoach: {},
       }
-      data.current.hien_trang.push(defaultObj)
-      data.current.quy_hoach.push(defaultObj)
+      data.current.du_lieu_thua.push(defaultObj)
     }
-    hien_trang.forEach(item => {
-      if (!item.thua || item.thua >= so_thua) return;
-      data.current.hien_trang[item.thua][item.loaiDat] = item.dienTich
+
+    // console.log(du_lieu_thua)
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].hien_trang[item.htld] = item.dien_tichHt
     })
-    quy_hoach.forEach((item => {
-      if (!item.thua || item.thua >= so_thua) return;
-      data.current.quy_hoach[item.thua][item.loaiDat] = item.dienTich
-    }))
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].quy_hoach[item.qhld] = item.dien_tichQh
+    })
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].tai_san_gan_lien = item.tai_san_gan_lien
+    })
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].thua_dat_so = item.thua_dat_so
+    })
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].to_ban_do_so = item.to_ban_do_so
+    })
   }, [
     tong_dien_tich,
     phap_ly,
@@ -74,7 +83,7 @@ export default function DatTs({ data }) {
     so_to,
     so_thua,
     ma_lo,
-    tai_san_gan_lien,
+    du_lieu_thua,
     dong_tien,
     dinh_vi,
     gia_ban,
@@ -82,90 +91,119 @@ export default function DatTs({ data }) {
     nguon,
     note,
     file_media_raw,
-    hien_trang,
-    quy_hoach
+    data.current.du_lieu_thua,
   ])
 
-  const themHienTrang = () => {
-    setHien_trang([...hien_trang, {}]);
+  const themDuLieuThua = () => {
+    setDu_lieu_thua([...du_lieu_thua, {}])
   }
-
-  const themQuyHoach = () => {
-    setQuy_hoach([...quy_hoach, {}]);
+  const thayDoiThuaDat = (thuaso, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].thua_dat_so = thuaso
+      return [...oldValue]
+    })
   }
-
-  const xoaHienTrang = (index) => {
-    setTimeout(() => {
-      setHien_trang(oldValue => {
-        oldValue.splice(index, 1)
-        return [...oldValue]
-      })
-    }, 100)
+  const thayDoiTaiSanGanLien = (taisan, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].tai_san_gan_lien = taisan
+      return [...oldValue]
+    })
   }
-
-  const xoaQuyHoach = (index) => {
-    setTimeout(() => {
-      setQuy_hoach(oldValue => {
-        oldValue.splice(index, 1)
-        return [...oldValue]
-      })
-    }, 100)
+  const thayDoiToBanDo = (bando, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].to_ban_do_so = bando
+      return [...oldValue]
+    })
   }
+  const thayDoiLoaiHienTrang = (ht, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].htld = ht
 
-  const thayDoiSoThua = (soThuaMoi) => {
-    try {
-      soThuaMoi = parseInt(soThuaMoi)
-      if (!isNaN(soThuaMoi)) {
-        setSo_thua(soThuaMoi)
-      } else {
-        setSo_thua(1)
-      }
-    } catch {
-      setSo_thua(1)
-    }
+      return [...oldValue]
+    })
   }
-
-  const thayDoiThuaHienTrang = (thuaMoi, index) => {
-    setHien_trang(oldValue => {
-      oldValue[index].thua = thuaMoi
+  const thayDoiLoaiQH = (qh, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].qhld = qh
+      return [...oldValue]
+    })
+  }
+  const thayDoiDienTichHt = (dientich, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].dien_tichHt = dientich
+      return [...oldValue]
+    })
+  }
+  const thayDoiDienTichQh = (dientich, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].dien_tichQh = dientich
       return [...oldValue]
     })
   }
 
-  const thayDoiLoaiDatHienTrang = (loaiDat, index) => {
-    setHien_trang(oldValue => {
-      oldValue[index].loaiDat = loaiDat
-      return [...oldValue]
-    })
-  }
+  // const themQuyHoach = () => {
+  //   setQuy_hoach([...quy_hoach, {}])
+  // }
 
-  const thayDoiDienTich = (dienTich, index) => {
-    setHien_trang(oldValue => {
-      oldValue[index].dienTich = dienTich
-      return [...oldValue]
-    })
-  }
+  // const xoaHienTrang = (index) => {
+  //   setTimeout(() => {
+  //     setDu_lieu_thua((olddu_lieu_thua) => {
+  //       oldValue.splice(index, 1)
+  //       return [...oldValue]
+  //     })
+  //   }, 100)
+  // }
 
-  const thayDoiSoThuaQHSDD = (thuaMoi, index) => {
-    setQuy_hoach(oldValue => {
-      oldValue[index].thua = thuaMoi
-      return [...oldValue]
-    })
-  }
+  // const xoaQuyHoach = (index) => {
+  //   setTimeout(() => {
+  //     setQuy_hoach((oldValue) => {
+  //       oldValue.splice(index, 1)
+  //       return [...oldValue]
+  //     })
+  //   }, 100)
+  // }
 
-  const thayDoiLoaiDatQHSDD = (loaiDat, index) => {
-    setQuy_hoach(oldValue => {
-      oldValue[index].loaiDat = loaiDat
-      return [...oldValue]
-    })
-  }
+  // const thayDoiThuaHienTrang = (thuaMoi, index) => {
+  //   setHien_trang((oldValue) => {
+  //     oldValue[index].thua = thuaMoi
+  //     return [...oldValue]
+  //   })
+  // }
 
-  const thayDoiDienTichQHSDD = (dienTich, index) => {
-    setQuy_hoach(oldValue => {
-      oldValue[index].dienTich = dienTich
-      return [...oldValue]
-    })
-  }
+  // const thayDoiLoaiDatHienTrang = (loaiDat, index) => {
+  //   setHien_trang((oldValue) => {
+  //     oldValue[index].loaiDat = loaiDat
+  //     return [...oldValue]
+  //   })
+  // }
+
+  // const thayDoiDienTich = (dienTich, index) => {
+  //   setHien_trang((oldValue) => {
+  //     oldValue[index].dienTich = dienTich
+  //     return [...oldValue]
+  //   })
+  // }
+
+  // const thayDoiSoThuaQHSDD = (thuaMoi, index) => {
+  //   setQuy_hoach((oldValue) => {
+  //     oldValue[index].thua = thuaMoi
+  //     return [...oldValue]
+  //   })
+  // }
+
+  // const thayDoiLoaiDatQHSDD = (loaiDat, index) => {
+  //   setQuy_hoach((oldValue) => {
+  //     oldValue[index].loaiDat = loaiDat
+  //     return [...oldValue]
+  //   })
+  // }
+
+  // const thayDoiDienTichQHSDD = (dienTich, index) => {
+  //   setQuy_hoach((oldValue) => {
+  //     oldValue[index].dienTich = dienTich
+  //     return [...oldValue]
+  //   })
+  // }
 
   return (
     <>
@@ -219,21 +257,15 @@ export default function DatTs({ data }) {
           <CFormInput placeholder="Nhập số tờ" />
           <CInputGroupText>Số thửa</CInputGroupText>
           <CFormInput
-            onChange={(e) => thayDoiSoThua(e.target.value)}
+            onChange={(e) => setSo_thua(e.target.value)}
+            value={so_thua}
             placeholder="Nhập số thửa"
           />
         </CInputGroup>
       ) : (
         <></>
       )}
-      <CInputGroup className="mb-2">
-        <CInputGroupText>Tài sản gắn liền</CInputGroupText>
-        <CFormInput
-          value={tai_san_gan_lien}
-          onChange={(e) => setTai_san_gan_lien(e.target.value)}
-          placeholder=""
-        />
-      </CInputGroup>
+
       <CInputGroup className="mb-2">
         <CInputGroupText>Dòng tiền</CInputGroupText>
         <CFormInput
@@ -244,24 +276,24 @@ export default function DatTs({ data }) {
       </CInputGroup>
       <CListGroup className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
-          Hiện trạng
+          Dữ liệu các thửa đất
         </p>
-        {hien_trang.map((item, index) => {
+        {du_lieu_thua.map((item, index) => {
           return (
             <CInputGroup key={index} className="mb-3">
-              <CFormSelect
-                onChange={(e) => thayDoiThuaHienTrang(e.target.value, index)}>
-                <option>Thửa số</option>
-                {Array.from(Array(so_thua).keys()).map((item, index) => {
-                  return (
-                    <option key={index} value={index}>
-                      {index + 1}
-                    </option>
-                  )
-                })}
-              </CFormSelect>
-              <CFormSelect
-                onChange={(e) => thayDoiLoaiDatHienTrang(e.target.value, index)}>
+              <CFormInput
+                onChange={(e) => thayDoiThuaDat(e.target.value, index)}
+                placeholder="Thửa đất số"
+              />
+              <CFormInput
+                onChange={(e) => thayDoiTaiSanGanLien(e.target.value, index)}
+                placeholder="nhập tài sản gắn liền"
+              />
+              <CFormInput
+                onChange={(e) => thayDoiToBanDo(e.target.value, index)}
+                placeholder="Tờ bản đồ số"
+              />
+              <CFormSelect onChange={(e) => thayDoiLoaiHienTrang(e.target.value, index)}>
                 <option>Hiện trạng</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
                 <option value={'cln'}>CLN(m2)</option>
@@ -274,22 +306,34 @@ export default function DatTs({ data }) {
                 <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
               <CFormInput
-                onChange={(e) => thayDoiDienTich(e.target.value, index)}
+                onChange={(e) => thayDoiDienTichHt(e.target.value, index)}
                 placeholder="Nhập số"
               />
-              <CButton color={'danger'} onClick={() => xoaHienTrang(index)}>
-                X
-              </CButton>
+              <CFormSelect onChange={(e) => thayDoiLoaiQH(e.target.value, index)}>
+                <option>Quy hoạch</option>
+                <option value={'dat_o'}>Đất ở(m2)</option>
+                <option value={'cln'}>CLN(m2)</option>
+                <option value={'bhk'}>BHK(m2)</option>
+                <option value={'luc'}>LUC(m2)</option>
+                <option value={'rsx'}>RSX(m2)</option>
+                <option value={'nts'}>NTS(m2)</option>
+                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'cong_cong'}>Công cộng(m2)</option>
+                <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
+              </CFormSelect>
+              <CFormInput
+                onChange={(e) => thayDoiDienTichQh(e.target.value, index)}
+                placeholder="Nhập số"
+              />
+              <CButton color={'danger'}>X</CButton>
             </CInputGroup>
           )
         })}
-        <CButton
-          onClick={themHienTrang}
-          color="warning">
+        <CButton onClick={themDuLieuThua} color="warning">
           Thêm
         </CButton>
       </CListGroup>
-      <CListGroup className="border border-dark p-1 mb-1">
+      {/* <CListGroup className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
           QH Sử dụng đất
         </p>
@@ -335,7 +379,7 @@ export default function DatTs({ data }) {
           color="warning">
           Thêm
         </CButton>
-      </CListGroup>
+      </CListGroup> */}
       <CInputGroup className="mb-2">
         <CInputGroupText>Định vị</CInputGroupText>
         <CFormInput
