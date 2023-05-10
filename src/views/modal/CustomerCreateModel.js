@@ -33,7 +33,6 @@ import {
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 import provinces_item from './Provinces.json'
-import MultiSelect from 'src/components/multiselect/MultiSelect'
 
 const CustomerCreateModel = ({}, ref) => {
   const [visible, setVisible] = useState(false)

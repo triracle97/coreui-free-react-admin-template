@@ -95,26 +95,38 @@ export default function DatTs({ data }) {
   ])
 
   const themDuLieuThua = () => {
-    setDu_lieu_thua([...du_lieu_thua, {}])
+    setDu_lieu_thua([...du_lieu_thua, {
+      thua_dat_so: '',
+      tai_san_gan_lien: '',
+      to_ban_do_so: '',
+      htld: '',
+      qhld: '',
+      dien_tichHt: '',
+      dien_tichQh: ''
+    }])
   }
+
   const thayDoiThuaDat = (thuaso, index) => {
     setDu_lieu_thua((oldValue) => {
       oldValue[index].thua_dat_so = thuaso
       return [...oldValue]
     })
   }
+
   const thayDoiTaiSanGanLien = (taisan, index) => {
     setDu_lieu_thua((oldValue) => {
       oldValue[index].tai_san_gan_lien = taisan
       return [...oldValue]
     })
   }
+
   const thayDoiToBanDo = (bando, index) => {
     setDu_lieu_thua((oldValue) => {
       oldValue[index].to_ban_do_so = bando
       return [...oldValue]
     })
   }
+
   const thayDoiLoaiHienTrang = (ht, index) => {
     setDu_lieu_thua((oldValue) => {
       oldValue[index].htld = ht
@@ -122,23 +134,35 @@ export default function DatTs({ data }) {
       return [...oldValue]
     })
   }
+
   const thayDoiLoaiQH = (qh, index) => {
     setDu_lieu_thua((oldValue) => {
       oldValue[index].qhld = qh
       return [...oldValue]
     })
   }
+
   const thayDoiDienTichHt = (dientich, index) => {
     setDu_lieu_thua((oldValue) => {
       oldValue[index].dien_tichHt = dientich
       return [...oldValue]
     })
   }
+
   const thayDoiDienTichQh = (dientich, index) => {
     setDu_lieu_thua((oldValue) => {
       oldValue[index].dien_tichQh = dientich
       return [...oldValue]
     })
+  }
+
+  const boDuLieuThua = (index) => {
+    setTimeout(() => {
+      setDu_lieu_thua((oldValue) => {
+        oldValue.splice(index, 1)
+        return [...oldValue]
+      })
+    }, 100)
   }
 
   // const themQuyHoach = () => {
@@ -282,18 +306,23 @@ export default function DatTs({ data }) {
           return (
             <CInputGroup key={index} className="mb-3">
               <CFormInput
+                value={item.thua_dat_so}
                 onChange={(e) => thayDoiThuaDat(e.target.value, index)}
                 placeholder="Thửa đất số"
               />
               <CFormInput
+                value={item.tai_san_gan_lien}
                 onChange={(e) => thayDoiTaiSanGanLien(e.target.value, index)}
                 placeholder="nhập tài sản gắn liền"
               />
               <CFormInput
+                value={item.to_ban_do_so}
                 onChange={(e) => thayDoiToBanDo(e.target.value, index)}
                 placeholder="Tờ bản đồ số"
               />
-              <CFormSelect onChange={(e) => thayDoiLoaiHienTrang(e.target.value, index)}>
+              <CFormSelect
+                value={item.htld}
+                onChange={(e) => thayDoiLoaiHienTrang(e.target.value, index)}>
                 <option>Hiện trạng</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
                 <option value={'cln'}>CLN(m2)</option>
@@ -306,10 +335,13 @@ export default function DatTs({ data }) {
                 <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
               <CFormInput
+                value={item.dien_tichHt}
                 onChange={(e) => thayDoiDienTichHt(e.target.value, index)}
                 placeholder="Nhập số"
               />
-              <CFormSelect onChange={(e) => thayDoiLoaiQH(e.target.value, index)}>
+              <CFormSelect
+                value={item.qhld}
+                onChange={(e) => thayDoiLoaiQH(e.target.value, index)}>
                 <option>Quy hoạch</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
                 <option value={'cln'}>CLN(m2)</option>
@@ -322,10 +354,11 @@ export default function DatTs({ data }) {
                 <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
               <CFormInput
+                value={item.dien_tichQh}
                 onChange={(e) => thayDoiDienTichQh(e.target.value, index)}
                 placeholder="Nhập số"
               />
-              <CButton color={'danger'}>X</CButton>
+              <CButton onClick={() => boDuLieuThua(index)} color={'danger'}>X</CButton>
             </CInputGroup>
           )
         })}
