@@ -3,7 +3,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
-import { CButton, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CListGroup } from '@coreui/react'
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CInputGroup,
+  CInputGroupText,
+  CListGroup,
+} from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
 export default function DatNen({ data }) {
@@ -20,8 +27,7 @@ export default function DatNen({ data }) {
   const [nguon, setNguon] = useState('')
   const [note, setNote] = useState('')
   const [file_media_raw, setFile_media_raw] = useState('')
-  const [hien_trang, setHien_trang] = useState([])
-  const [quy_hoach, setQuy_hoach] = useState([])
+  const [du_lieu_thua, setDu_lieu_thua] = useState([])
 
   useEffect(() => {
     data.current = {
@@ -38,31 +44,31 @@ export default function DatNen({ data }) {
       note,
       file_media_raw,
     }
-    data.current.hien_trang = []
-    data.current.quy_hoach = []
-    for (let i = 0; i < so_thua; i++) {
+    data.current.du_lieu_thua = []
+
+    for (let i = 0; i < du_lieu_thua.length; i++) {
       const defaultObj = {
-        dat_o: 0,
-        CLN: 0,
-        BHK: 0,
-        LUC: 0,
-        RSX: 0,
-        NTS: 0,
-        TMD: 0,
-        cong_cong: 0,
-        qh_giao_thong: 0,
+        thua_dat_so: '',
+        to_ban_do_so: '',
+        hien_trang: {},
+        quy_hoach: {},
       }
-      data.current.hien_trang.push(defaultObj)
-      data.current.quy_hoach.push(defaultObj)
+      data.current.du_lieu_thua.push(defaultObj)
     }
-    hien_trang.forEach(item => {
-      if (!item.thua || item.thua >= so_thua) return;
-      data.current.hien_trang[item.thua][item.loaiDat] = item.dienTich
+
+    // console.log(du_lieu_thua)
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].hien_trang[item.htld] = item.dien_tichHt
     })
-    quy_hoach.forEach((item => {
-      if (!item.thua || item.thua >= so_thua) return;
-      data.current.quy_hoach[item.thua][item.loaiDat] = item.dienTich
-    }))
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].quy_hoach[item.qhld] = item.dien_tichQh
+    })
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].thua_dat_so = item.thua_dat_so
+    })
+    du_lieu_thua.forEach((item, index) => {
+      data.current.du_lieu_thua[index].to_ban_do_so = item.to_ban_do_so
+    })
   }, [
     tong_dien_tich,
     phap_ly,
@@ -76,91 +82,75 @@ export default function DatNen({ data }) {
     nguon,
     note,
     file_media_raw,
-    hien_trang,
-    quy_hoach
+    data.current.du_lieu_thua,
+    du_lieu_thua,
   ])
 
-  const themHienTrang = () => {
-    setHien_trang([...hien_trang, {}]);
+  const themDuLieuThua = () => {
+    setDu_lieu_thua([
+      ...du_lieu_thua,
+      {
+        thua_dat_so: '',
+        to_ban_do_so: '',
+        htld: '',
+        qhld: '',
+        dien_tichHt: '',
+        dien_tichQh: '',
+      },
+    ])
   }
 
-  const themQuyHoach = () => {
-    setQuy_hoach([...quy_hoach, {}]);
+  const thayDoiThuaDat = (thuaso, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].thua_dat_so = thuaso
+      return [...oldValue]
+    })
   }
 
-  const xoaHienTrang = (index) => {
+  const thayDoiToBanDo = (bando, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].to_ban_do_so = bando
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiLoaiHienTrang = (ht, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].htld = ht
+
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiLoaiQH = (qh, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].qhld = qh
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiDienTichHt = (dientich, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].dien_tichHt = dientich
+      return [...oldValue]
+    })
+  }
+
+  const thayDoiDienTichQh = (dientich, index) => {
+    setDu_lieu_thua((oldValue) => {
+      oldValue[index].dien_tichQh = dientich
+      return [...oldValue]
+    })
+  }
+
+  const boDuLieuThua = (index) => {
     setTimeout(() => {
-      setHien_trang(oldValue => {
+      setDu_lieu_thua((oldValue) => {
         oldValue.splice(index, 1)
         return [...oldValue]
       })
     }, 100)
   }
-
-  const xoaQuyHoach = (index) => {
-    setTimeout(() => {
-      setQuy_hoach(oldValue => {
-        oldValue.splice(index, 1)
-        return [...oldValue]
-      })
-    }, 100)
-  }
-
-  const thayDoiSoThua = (soThuaMoi) => {
-    try {
-      soThuaMoi = parseInt(soThuaMoi)
-      if (!isNaN(soThuaMoi)) {
-        setSo_thua(soThuaMoi)
-      } else {
-        setSo_thua(1)
-      }
-    } catch {
-      setSo_thua(1)
-    }
-  }
-
-  const thayDoiThuaHienTrang = (thuaMoi, index) => {
-    setHien_trang(oldValue => {
-      oldValue[index].thua = thuaMoi
-      return [...oldValue]
-    })
-  }
-
-  const thayDoiLoaiDatHienTrang = (loaiDat, index) => {
-    setHien_trang(oldValue => {
-      oldValue[index].loaiDat = loaiDat
-      return [...oldValue]
-    })
-  }
-
-  const thayDoiDienTich = (dienTich, index) => {
-    setHien_trang(oldValue => {
-      oldValue[index].dienTich = dienTich
-      return [...oldValue]
-    })
-  }
-
-  const thayDoiSoThuaQHSDD = (thuaMoi, index) => {
-    setQuy_hoach(oldValue => {
-      oldValue[index].thua = thuaMoi
-      return [...oldValue]
-    })
-  }
-
-  const thayDoiLoaiDatQHSDD = (loaiDat, index) => {
-    setQuy_hoach(oldValue => {
-      oldValue[index].loaiDat = loaiDat
-      return [...oldValue]
-    })
-  }
-
-  const thayDoiDienTichQHSDD = (dienTich, index) => {
-    setQuy_hoach(oldValue => {
-      oldValue[index].dienTich = dienTich
-      return [...oldValue]
-    })
-  }
-
   return (
     <>
       <CInputGroup className="mb-2">
@@ -214,7 +204,7 @@ export default function DatNen({ data }) {
           <CInputGroupText>Số thửa</CInputGroupText>
           <CFormInput
             value={so_thua}
-            onChange={(e) => thayDoiSoThua(e.target.value)}
+            onChange={(e) => setSo_thua(e.target.value)}
             placeholder="Nhập số thửa"
           />
         </CInputGroup>
@@ -223,95 +213,66 @@ export default function DatNen({ data }) {
       )}
       <CListGroup className="border border-dark p-1 mb-1">
         <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
-          Hiện trạng
+          Dữ liệu các thửa đất
         </p>
-        {hien_trang.map((item, index) => {
+        {du_lieu_thua.map((item, index) => {
           return (
             <CInputGroup key={index} className="mb-3">
+              <CFormInput
+                value={item.thua_dat_so}
+                onChange={(e) => thayDoiThuaDat(e.target.value, index)}
+                placeholder="Thửa đất số"
+              />
+
+              <CFormInput
+                value={item.to_ban_do_so}
+                onChange={(e) => thayDoiToBanDo(e.target.value, index)}
+                placeholder="Tờ bản đồ số"
+              />
               <CFormSelect
-                onChange={(e) => thayDoiThuaHienTrang(e.target.value, index)}>
-                <option>Thửa số</option>
-                {Array.from(Array(so_thua).keys()).map((item, index) => {
-                  return (
-                    <option key={index} value={index}>
-                      {index + 1}
-                    </option>
-                  )
-                })}
-              </CFormSelect>
-              <CFormSelect
-                onChange={(e) => thayDoiLoaiDatHienTrang(e.target.value, index)}>
+                value={item.htld}
+                onChange={(e) => thayDoiLoaiHienTrang(e.target.value, index)}
+              >
                 <option>Hiện trạng</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
-                <option value={'cln'}>CLN(m2)</option>
-                <option value={'bhk'}>BHK(m2)</option>
-                <option value={'luc'}>LUC(m2)</option>
-                <option value={'rsx'}>RSX(m2)</option>
-                <option value={'nts'}>NTS(m2)</option>
-                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'CLN'}>CLN(m2)</option>
+                <option value={'BHK'}>BHK(m2)</option>
+                <option value={'LUC'}>LUC(m2)</option>
+                <option value={'RSX'}>RSX(m2)</option>
+                <option value={'NTS'}>NTS(m2)</option>
+                <option value={'TMD'}>TMD(m2)</option>
                 <option value={'cong_cong'}>Công cộng(m2)</option>
                 <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
               <CFormInput
-                onChange={(e) => thayDoiDienTich(e.target.value, index)}
+                value={item.dien_tichHt}
+                onChange={(e) => thayDoiDienTichHt(e.target.value, index)}
                 placeholder="Nhập số"
               />
-              <CButton color={'danger'} onClick={() => xoaHienTrang(index)}>
-                X
-              </CButton>
-            </CInputGroup>
-          )
-        })}
-        <CButton
-          onClick={themHienTrang}
-          color="warning">
-          Thêm
-        </CButton>
-      </CListGroup>
-      <CListGroup className="border border-dark p-1 mb-1">
-        <p className="d-block border-bottom border-dark" style={{ paddingLeft: '10px' }}>
-          QH Sử dụng đất
-        </p>
-        {quy_hoach.map((item, index) => {
-          return (
-            <CInputGroup key={index} className="mb-3">
-              <CFormSelect
-                onChange={(e) => thayDoiSoThuaQHSDD(e.target.value, index)}>
-                <option>Thửa số</option>
-                {Array.from(Array(so_thua).keys()).map((item, index) => {
-                  return (
-                    <option key={index} value={index}>
-                      {index + 1}
-                    </option>
-                  )
-                })}
-              </CFormSelect>
-              <CFormSelect
-                onChange={(e) => thayDoiLoaiDatQHSDD(e.target.value, index)}>
-                <option>QHSDD</option>
+              <CFormSelect value={item.qhld} onChange={(e) => thayDoiLoaiQH(e.target.value, index)}>
+                <option>Quy hoạch</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
-                <option value={'cln'}>CLN(m2)</option>
-                <option value={'bhk'}>BHK(m2)</option>
-                <option value={'luc'}>LUC(m2)</option>
-                <option value={'rsx'}>RSX(m2)</option>
-                <option value={'nts'}>NTS(m2)</option>
-                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'CLN'}>CLN(m2)</option>
+                <option value={'BHK'}>BHK(m2)</option>
+                <option value={'LUC'}>LUC(m2)</option>
+                <option value={'RSX'}>RSX(m2)</option>
+                <option value={'NTS'}>NTS(m2)</option>
+                <option value={'TMD'}>TMD(m2)</option>
                 <option value={'cong_cong'}>Công cộng(m2)</option>
                 <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
               <CFormInput
-                onChange={(e) => thayDoiDienTichQHSDD(e.target.value, index)}
+                value={item.dien_tichQh}
+                onChange={(e) => thayDoiDienTichQh(e.target.value, index)}
                 placeholder="Nhập số"
               />
-              <CButton color={'danger'} onClick={() => xoaQuyHoach(index)}>
+              <CButton onClick={() => boDuLieuThua(index)} color={'danger'}>
                 X
               </CButton>
             </CInputGroup>
           )
         })}
-        <CButton
-          onClick={themQuyHoach}
-          color="warning">
+        <CButton onClick={themDuLieuThua} color="warning">
           Thêm
         </CButton>
       </CListGroup>

@@ -95,15 +95,18 @@ export default function DatTs({ data }) {
   ])
 
   const themDuLieuThua = () => {
-    setDu_lieu_thua([...du_lieu_thua, {
-      thua_dat_so: '',
-      tai_san_gan_lien: '',
-      to_ban_do_so: '',
-      htld: '',
-      qhld: '',
-      dien_tichHt: '',
-      dien_tichQh: ''
-    }])
+    setDu_lieu_thua([
+      ...du_lieu_thua,
+      {
+        thua_dat_so: '',
+        tai_san_gan_lien: '',
+        to_ban_do_so: '',
+        htld: '',
+        qhld: '',
+        dien_tichHt: '',
+        dien_tichQh: '',
+      },
+    ])
   }
 
   const thayDoiThuaDat = (thuaso, index) => {
@@ -322,15 +325,16 @@ export default function DatTs({ data }) {
               />
               <CFormSelect
                 value={item.htld}
-                onChange={(e) => thayDoiLoaiHienTrang(e.target.value, index)}>
+                onChange={(e) => thayDoiLoaiHienTrang(e.target.value, index)}
+              >
                 <option>Hiện trạng</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
-                <option value={'cln'}>CLN(m2)</option>
-                <option value={'bhk'}>BHK(m2)</option>
-                <option value={'luc'}>LUC(m2)</option>
-                <option value={'rsx'}>RSX(m2)</option>
-                <option value={'nts'}>NTS(m2)</option>
-                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'CLN'}>CLN(m2)</option>
+                <option value={'BHK'}>BHK(m2)</option>
+                <option value={'LUC'}>LUC(m2)</option>
+                <option value={'RSX'}>RSX(m2)</option>
+                <option value={'NTS'}>NTS(m2)</option>
+                <option value={'TMD'}>TMD(m2)</option>
                 <option value={'cong_cong'}>Công cộng(m2)</option>
                 <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
@@ -339,17 +343,15 @@ export default function DatTs({ data }) {
                 onChange={(e) => thayDoiDienTichHt(e.target.value, index)}
                 placeholder="Nhập số"
               />
-              <CFormSelect
-                value={item.qhld}
-                onChange={(e) => thayDoiLoaiQH(e.target.value, index)}>
+              <CFormSelect value={item.qhld} onChange={(e) => thayDoiLoaiQH(e.target.value, index)}>
                 <option>Quy hoạch</option>
                 <option value={'dat_o'}>Đất ở(m2)</option>
-                <option value={'cln'}>CLN(m2)</option>
-                <option value={'bhk'}>BHK(m2)</option>
-                <option value={'luc'}>LUC(m2)</option>
-                <option value={'rsx'}>RSX(m2)</option>
-                <option value={'nts'}>NTS(m2)</option>
-                <option value={'tmd'}>TMD(m2)</option>
+                <option value={'CLN'}>CLN(m2)</option>
+                <option value={'BHK'}>BHK(m2)</option>
+                <option value={'LUC'}>LUC(m2)</option>
+                <option value={'RSX'}>RSX(m2)</option>
+                <option value={'NTS'}>NTS(m2)</option>
+                <option value={'TMD'}>TMD(m2)</option>
                 <option value={'cong_cong'}>Công cộng(m2)</option>
                 <option value={'qh_giao_thong'}>QH giao thông(m2)</option>
               </CFormSelect>
@@ -358,7 +360,9 @@ export default function DatTs({ data }) {
                 onChange={(e) => thayDoiDienTichQh(e.target.value, index)}
                 placeholder="Nhập số"
               />
-              <CButton onClick={() => boDuLieuThua(index)} color={'danger'}>X</CButton>
+              <CButton onClick={() => boDuLieuThua(index)} color={'danger'}>
+                X
+              </CButton>
             </CInputGroup>
           )
         })}
