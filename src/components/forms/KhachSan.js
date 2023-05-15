@@ -39,6 +39,7 @@ export default function KhachSan({ data }) {
       so_thua,
       trang_thai,
       tong_dien_tich,
+      dien_tich_san,
       so_tang,
       so_phong,
       muc_dich_su_dung_dat_khach_san,
@@ -61,6 +62,7 @@ export default function KhachSan({ data }) {
     so_thua,
     trang_thai,
     tong_dien_tich,
+    dien_tich_san,
     so_tang,
     so_phong,
     muc_dich_su_dung_dat_khach_san,
@@ -91,6 +93,7 @@ export default function KhachSan({ data }) {
           value={so_sao}
           onChange={(e) => setSo_sao(e.target.value)}
           placeholder="Nhập số sao"
+          type="number"
         />
       </CInputGroup>
       <CInputGroup className="mb-2">
@@ -134,12 +137,14 @@ export default function KhachSan({ data }) {
             value={so_to}
             onChange={(e) => setSo_to(e.target.value)}
             placeholder="Nhập số tờ"
+            type="number"
           />
           <CInputGroupText>Số thửa</CInputGroupText>
           <CFormInput
             value={so_thua}
             onChange={(e) => setSo_thua(e.target.value)}
             placeholder="Nhập số thửa"
+            type="number"
           />
         </CInputGroup>
       ) : (
@@ -159,17 +164,19 @@ export default function KhachSan({ data }) {
         </CFormSelect>
       </CInputGroup>
       <CInputGroup className="mb-2">
-        <CInputGroupText>Diện tích(m2)</CInputGroupText>
+        <CInputGroupText>Tổng diện tích(m2)</CInputGroupText>
         <CFormInput
           value={tong_dien_tich}
           onChange={(e) => setTong_dien_tich(e.target.value)}
           placeholder="Nhập diện tích"
+          type="number"
         />
         <CInputGroupText>Diện tích sàn(m2)</CInputGroupText>
         <CFormInput
           value={dien_tich_san}
           onChange={(e) => setDien_tich_san(e.target.value)}
           placeholder="Nhập diện tích sàn"
+          type="number"
         />
       </CInputGroup>
       <CInputGroup className="mb-2">
@@ -178,12 +185,14 @@ export default function KhachSan({ data }) {
           value={so_tang}
           onChange={(e) => setSo_tang(e.target.value)}
           placeholder="Nhập số tầng"
+          type="number"
         />
         <CInputGroupText>Số phòng</CInputGroupText>
         <CFormInput
           value={so_phong}
           onChange={(e) => setSo_phong(e.target.value)}
           placeholder="Nhập số phòng"
+          type="number"
         />
       </CInputGroup>
       <CInputGroup className="mb-2">
@@ -216,14 +225,16 @@ export default function KhachSan({ data }) {
           value={doanh_thu_thang}
           onChange={(e) => setDoanh_thu_thang(e.target.value)}
           placeholder=""
+          type="number"
         />
       </CInputGroup>
-      <CInputGroup>
+      <CInputGroup className="mb-2">
         <CInputGroupText>Lợi nhuận tháng(triệu)</CInputGroupText>
         <CFormInput
           value={loi_nhuan_thang}
           onChange={(e) => setLoi_nhuan_thang(e.target.value)}
           placeholder=""
+          type="number"
         />
       </CInputGroup>
       <CInputGroup className="mb-2">
@@ -236,9 +247,19 @@ export default function KhachSan({ data }) {
       </CInputGroup>
       <CInputGroup className="mb-2">
         <CInputGroupText>Giá bán(tỷ)</CInputGroupText>
-        <CFormInput placeholder="" value={gia_ban} onChange={(e) => setGia_ban(e.target.value)} />
+        <CFormInput
+          placeholder=""
+          value={gia_ban}
+          type="number"
+          onChange={(e) => setGia_ban(e.target.value)}
+        />
         <CInputGroupText>Hoa hồng(%)</CInputGroupText>
-        <CFormInput placeholder="" value={hoa_hong} onChange={(e) => setHoa_hong(e.target.value)} />
+        <CFormInput
+          placeholder=""
+          value={hoa_hong}
+          type="number"
+          onChange={(e) => setHoa_hong(e.target.value)}
+        />
       </CInputGroup>
       <CInputGroup className="mb-2">
         <CInputGroupText>Nguồn</CInputGroupText>

@@ -22,12 +22,19 @@ import ProductCreateModel from '../modal/ProductCreateModel'
 import axios from 'axios'
 import { BACKEND_HOST } from 'src/constant'
 import Cookies from 'js-cookie'
-import { getFormatTime } from '../../utils'
+import { getFormatTime } from '../../utils/index'
 import InforProductModal from '../modal/InforProductModal'
+import EditProductModal from '../modal/EditProductModal'
 
 export default function Product() {
   const createProductModelRef = useRef()
   const inforModalRef = useRef()
+  const editProductModalRef = useRef()
+
+  const openEditProductModal = (item) => {
+    editProductModalRef.current?.show()
+    editProductModalRef.current?.passData(item)
+  }
   const openCreateProduct = () => {
     createProductModelRef.current?.show()
   }
@@ -42,6 +49,7 @@ export default function Product() {
   const [visible, setVisible] = useState(false)
   const [maxPage, setMaxPage] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
+  const [deleteid, setDeleteId] = useState('')
 
   useEffect(() => {
     getProductsData()
@@ -87,8 +95,9 @@ export default function Product() {
       })
     setUpdate(true)
   }
-  const handleDelete = () => {
+  const handleDelete = (id) => {
     setVisible(!visible)
+    setDeleteId(id)
   }
   const deleteProduct = (id) => {
     axios
@@ -97,6 +106,7 @@ export default function Product() {
       })
       .then((res) => {
         console.log('success')
+        console.log(id)
       })
       .catch((err) => {
         console.log('Error', err)
@@ -149,33 +159,33 @@ export default function Product() {
                     >
                       Reject
                     </CButton>
-                    <CButton
-                      color="danger"
-                      variant="outline"
-                      className="mx-1"
-                      onClick={() => handleDelete(p._id)}
-                    >
-                      Delete
-                    </CButton>
-                    <CModal visible={visible} onClose={() => setVisible(false)}>
-                      <CModalHeader onClose={() => setVisible(false)}>
-                        <CModalTitle>Cảnh báo</CModalTitle>
-                      </CModalHeader>
-                      <CModalBody>Bạn thực sự muốn xóa sản phẩm</CModalBody>
-                      <CModalFooter>
-                        <CButton color="primary" onClick={() => deleteProduct(p._id)}>
-                          Đúng
-                        </CButton>
-                        <CButton color="secondary" onClick={() => setVisible(false)}>
-                          Không
-                        </CButton>
-                      </CModalFooter>
-                    </CModal>
                   </>
                 ) : (
                   <></>
                 )}
-                <CButton color="primary" className="mx-1">
+                <CButton
+                  color="danger"
+                  variant="outline"
+                  className="mx-1"
+                  onClick={() => handleDelete(p._id)}
+                >
+                  Delete
+                </CButton>
+                <CModal visible={visible} onClose={() => setVisible(false)}>
+                  <CModalHeader onClose={() => setVisible(false)}>
+                    <CModalTitle>Cảnh báo</CModalTitle>
+                  </CModalHeader>
+                  <CModalBody>Bạn thực sự muốn xóa sản phẩm</CModalBody>
+                  <CModalFooter>
+                    <CButton color="primary" onClick={() => deleteProduct(deleteid)}>
+                      Đúng
+                    </CButton>
+                    <CButton color="secondary" onClick={() => setVisible(false)}>
+                      Không
+                    </CButton>
+                  </CModalFooter>
+                </CModal>
+                <CButton color="primary" className="mx-1" onClick={() => openEditProductModal(p)}>
                   Edit
                 </CButton>
                 <CButton color="info" className="mx-1" onClick={() => openInforProduct(p)}>
@@ -212,6 +222,7 @@ export default function Product() {
               </CTableDataCell>
             </CTableRow>
           ))}
+          <EditProductModal ref={editProductModalRef} getProductsData={getProductsData} />
           <InforProductModal ref={inforModalRef}></InforProductModal>
         </CTableBody>
       </CTable>
