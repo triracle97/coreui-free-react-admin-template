@@ -8,17 +8,18 @@ import React, { useImperativeHandle, useState } from 'react'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 
-export default function Actions({ openEditUser, item, getUsersData }) {
-  const open = openEditUser
-  const get = getUsersData
+export default function Actions({ openEdit, item, getData, content }) {
+  const open = openEdit
+  const get = getData
   const id = item.id
-  function editUser() {
+
+  function edit() {
     open(item)
   }
 
-  const deleteUser = () => {
+  const deleteContent = () => {
     axios
-      .delete(`${BACKEND_HOST}/user/${id}`, {
+      .delete(`${BACKEND_HOST}/${content}/${id}`, {
         method: 'DELETE',
       })
       .then((res) => {
@@ -32,20 +33,13 @@ export default function Actions({ openEditUser, item, getUsersData }) {
   return (
     <div className="d-flex flex-row justify-content-around align-items-center ">
       <CIcon icon={cilLoopCircular} width={16} height={16} title="update" className="mx-3" />
-      <CIcon
-        icon={cilPencil}
-        width={16}
-        height={16}
-        title="edit"
-        onClick={editUser}
-        className="mx-3"
-      />
+      <CIcon icon={cilPencil} width={16} height={16} title="edit" onClick={edit} className="mx-3" />
       <CIcon
         icon={cilX}
         width={16}
         height={16}
         title="delete"
-        onClick={deleteUser}
+        onClick={deleteContent}
         className="mx-3"
       />
     </div>

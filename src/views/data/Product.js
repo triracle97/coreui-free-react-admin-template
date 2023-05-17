@@ -62,10 +62,12 @@ export default function Product() {
     })
   }, [])
   const getProductsData = () => {
+    const offset = (currentPage - 1) * limit
     axios
       .get(`${BACKEND_HOST}/product`, {
         params: {
           limit,
+          offset,
         },
       })
       .then((res) => {
@@ -234,6 +236,7 @@ export default function Product() {
         >
           <span aria-hidden="true">&laquo;</span>
         </CPaginationItem>
+
         <CPaginationItem>{currentPage}</CPaginationItem>
         <CPaginationItem
           disabled={currentPage === maxPage}

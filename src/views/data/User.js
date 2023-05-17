@@ -97,9 +97,10 @@ const User = () => {
               <CTableRow key={item.id}>
                 <CTableDataCell style={{ width: '200px' }}>
                   <Actions
-                    openEditUser={() => openEditUser(item)}
+                    openEdit={() => openEditUser(item)}
                     item={item}
-                    getUsersData={getUsersData}
+                    getData={getUsersData}
+                    content="user"
                   />
                 </CTableDataCell>
                 <CTableDataCell>{item.username}</CTableDataCell>

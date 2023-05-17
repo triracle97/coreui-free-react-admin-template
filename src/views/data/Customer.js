@@ -18,18 +18,21 @@ import { BACKEND_HOST } from '../../constant'
 import CustomerCreateModel from '../modal/CustomerCreateModel'
 import Actions from './Actions'
 import FilterCustomerModal from '../modal/FilterCustomerModal'
+import EditCustomerModal from '../modal/EditCustomerModal'
 
 const Customer = () => {
   const [customer, setCustomer] = useState([])
   const [limit, setLimit] = useState(20)
   const [offset, setOffset] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const createUserModalRef = useRef()
   const filterUserModalRef = useRef()
+  const editCustomerModalRef = useRef()
 
   useEffect(() => {
     getCustomersData()
-  }, [])
+  }, [currentPage])
 
   const getCustomersData = () => {
     axios
@@ -47,7 +50,10 @@ const Customer = () => {
         console.log('Error while getting Customer', err)
       })
   }
-
+  const openEditCustomer = (item) => {
+    editCustomerModalRef.current?.show()
+    editCustomerModalRef.current?.passData(item)
+  }
   const filterCustomerData = () => {
     filterUserModalRef.current?.show()
   }
@@ -102,7 +108,12 @@ const Customer = () => {
             return (
               <CTableRow key={index}>
                 <CTableDataCell style={{ width: '200px' }}>
-                  <Actions item={item} />
+                  <Actions
+                    openEdit={() => openEditCustomer(item)}
+                    item={item}
+                    getData={getCustomersData}
+                    content="customer"
+                  />
                 </CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
                 <CTableDataCell>{item.phone}</CTableDataCell>
@@ -118,6 +129,7 @@ const Customer = () => {
               </CTableRow>
             )
           })}
+          <EditCustomerModal ref={editCustomerModalRef} />
         </CTableBody>
       </CTable>
       <CPagination aria-label="Page navigation example">
