@@ -24,9 +24,6 @@ import DatNen from 'src/components/forms/DatNen'
 import KhachSan from 'src/components/forms/KhachSan'
 import DuAn from 'src/components/forms/DuAn'
 import DatTs from 'src/components/forms/DatTs'
-import EditDatNen from 'src/components/forms/EditDatNen'
-import EditDatTs from 'src/components/forms/EditDatTs'
-import EditKhachSan from 'src/components/forms/EditKhachSan'
 
 const EditProductModal = ({ getProductsData }, ref) => {
   const [visible, setVisible] = useState(false)
