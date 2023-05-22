@@ -78,7 +78,7 @@ const FilterCustomerModal = ({ handleSubmit }, ref) => {
   return (
     <CModal visible={visible} onClose={() => setVisible(false)}>
       <CModalHeader closeButton>
-        <CModalTitle>Create Customer</CModalTitle>
+        <CModalTitle>Filter Customer</CModalTitle>
       </CModalHeader>
       <CModalBody>
         {error && <CAlert color="danger">{'Error'}</CAlert>}

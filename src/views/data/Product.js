@@ -25,11 +25,13 @@ import Cookies from 'js-cookie'
 import { getFormatTime } from '../../utils/index'
 import InforProductModal from '../modal/InforProductModal'
 import EditProductModal from '../modal/EditProductModal'
+import FilterProductModal from '../modal/FilterProductModal';
 
 export default function Product() {
   const createProductModelRef = useRef()
   const inforModalRef = useRef()
   const editProductModalRef = useRef()
+  const filterProductModalRef = useRef()
 
   const openEditProductModal = (item) => {
     editProductModalRef.current?.show()
@@ -50,17 +52,19 @@ export default function Product() {
   const [maxPage, setMaxPage] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
   const [deleteid, setDeleteId] = useState('')
+  const [filter, setFilter] = useState({});
 
   useEffect(() => {
     getProductsData()
-  }, [update, currentPage])
+  }, [update, currentPage, filter])
+
   useEffect(() => {
     axios.get(`${BACKEND_HOST}/product/count`).then((res) => {
       const { countProducts } = res.data
-      console.log(res)
       setMaxPage(Math.floor((countProducts + limit - 1) / limit))
     })
   }, [])
+
   const getProductsData = () => {
     const offset = (currentPage - 1) * limit
     axios
@@ -68,6 +72,7 @@ export default function Product() {
         params: {
           limit,
           offset,
+          filter
         },
       })
       .then((res) => {
@@ -81,6 +86,7 @@ export default function Product() {
       })
     setUpdate(false)
   }
+
   const changeStatus = (id, value) => {
     axios
       .patch(`${BACKEND_HOST}/product/${id}`, {
@@ -101,6 +107,7 @@ export default function Product() {
     setVisible(!visible)
     setDeleteId(id)
   }
+
   const deleteProduct = (id) => {
     axios
       .delete(`${BACKEND_HOST}/product/${id}`, {
@@ -115,6 +122,7 @@ export default function Product() {
       })
     setUpdate(true)
   }
+
   const goToNextPage = () => {
     setCurrentPage(currentPage + 1)
   }
@@ -123,11 +131,22 @@ export default function Product() {
     setCurrentPage(currentPage - 1)
   }
 
+  const filterProductData = () => {
+    filterProductModalRef.current.show()
+  }
+
+  const handleFilterSubmit = (filter) => {
+    setFilter(filter);
+  }
+
   return (
     <CRow>
       <CCol>
         <CButton onClick={openCreateProduct} className="px-4 mb-3">
           Create Product
+        </CButton>
+        <CButton onClick={filterProductData} className="px-4 mb-3 mx-lg-3">
+          Filter Product
         </CButton>
       </CCol>
       <CTable>
@@ -247,6 +266,7 @@ export default function Product() {
         </CPaginationItem>
       </CPagination>
       <ProductCreateModel ref={createProductModelRef} getProductsData={getProductsData} />
+      <FilterProductModal ref={filterProductModalRef} handleSubmit={handleFilterSubmit}/>
     </CRow>
   )
 }

@@ -144,7 +144,7 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
               <option value="dong-nai">Đồng Nai</option>
               <option value="vung-tau">Vũng Tàu</option>
               <option value="kien-giang">Kiên Giang</option>
-              <option value="">Khác</option>
+              <option value="khac">Khác</option>
             </CFormSelect>
             {/* {khu_vuc === '' ? (
               <CFormInput
