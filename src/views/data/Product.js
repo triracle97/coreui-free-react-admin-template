@@ -136,6 +136,7 @@ export default function Product() {
   }
 
   const handleFilterSubmit = (filter) => {
+    setCurrentPage(1);
     setFilter(filter);
   }
 
