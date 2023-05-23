@@ -13,21 +13,22 @@ import {
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
-export default function DatNen({ data }) {
-  const [tong_dien_tich, setTong_dien_tich] = useState('')
-  const [phap_ly, setPhap_ly] = useState('')
-  const [khac, setKhac] = useState('')
-  const [so_to, setSo_to] = useState('')
-  const [so_thua, setSo_thua] = useState('')
-  const [ma_lo, setMa_lo] = useState('')
+export default function DatNen({ data, value }) {
+  const [tong_dien_tich, setTong_dien_tich] = useState(value?.tong_dien_tich ?? '')
+  const [phap_ly, setPhap_ly] = useState(value?.phap_ly ?? '')
+  const [khac, setKhac] = useState(value?.phap_ly_info?.khac ?? '')
+  const [so_to, setSo_to] = useState(value?.phap_ly_info?.so_to ?? '')
+  const [so_thua, setSo_thua] = useState(value?.phap_ly_info?.so_thua ?? '')
+  const [ma_lo, setMa_lo] = useState(value?.phap_ly_info?.ma_lo ?? '')
 
-  const [dinh_vi, setDinh_vi] = useState('')
-  const [gia_ban, setGia_ban] = useState('')
-  const [hoa_hong, setHoa_hong] = useState('')
-  const [nguon, setNguon] = useState('')
-  const [note, setNote] = useState('')
-  const [file_media_raw, setFile_media_raw] = useState('')
-  const [du_lieu_thua, setDu_lieu_thua] = useState([])
+  const [dinh_vi, setDinh_vi] = useState(value?.dinh_vi ?? '')
+  const [gia_ban, setGia_ban] = useState(value?.gia_ban ?? '')
+  const [hoa_hong, setHoa_hong] = useState(value?.hoahong ?? '')
+  const [nguon, setNguon] = useState(value?.nguon ?? '')
+  const [note, setNote] = useState(value?.note ?? '')
+  const [file_media_raw, setFile_media_raw] = useState(value?.file_media_raw ?? '')
+  const [du_lieu_thua, setDu_lieu_thua] = useState(value?.du_lieu_thua ?? [])
+  console.log(value)
 
   useEffect(() => {
     data.current = {

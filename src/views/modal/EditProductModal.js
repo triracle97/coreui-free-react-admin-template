@@ -47,13 +47,17 @@ const EditProductModal = ({ getProductsData }, ref) => {
     },
     passData: (item) => {
       setValue(item)
+      setTen_san_pham(item.ten_san_pham)
+      setNguon_sp(item.nguon_sp)
+      setKhu_vuc(item.khu_vuc)
+      setDia_chi(item.dia_chi)
     },
   }))
   console.log(value)
   const handleSubmit = () => {
     axios
-      .patch(`${BACKEND_HOST}/product/create`, {
-        product: {
+      .patch(`${BACKEND_HOST}/product/${value._id}`, {
+        values: {
           nguon_sp,
           ten_san_pham,
           khu_vuc,

@@ -6,19 +6,23 @@
 import { CFormInput, CFormSelect, CInputGroup, CInputGroupText } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
-export default function DuAn({ data }) {
-  const [loai_hinh, setLoai_hinh] = useState('')
-  const [ten_du_an, setTen_du_an] = useState('')
-  const [tong_dien_tich, setTong_dien_tich] = useState('')
-  const [chu_dau_tu, setChu_dau_tu] = useState('')
-  const [hinh_thuc_chuyen_nhuong, setHinh_thuc_chuyen_nhuong] = useState('')
-  const [phuong_an_thanh_toan, setPhuong_an_thanh_toan] = useState('')
-  const [hien_trang_phap_ly, setHien_trang_phap_ly] = useState([])
-  const [gia_ban, setGia_ban] = useState('')
-  const [hoa_hong, setHoa_hong] = useState('')
-  const [nguon, setNguon] = useState('')
-  const [note, setNote] = useState('')
-  const [file_media_raw, setFile_media_raw] = useState('')
+export default function DuAn({ data, value }) {
+  const [loai_hinh, setLoai_hinh] = useState(value?.loai_hinh ?? '')
+  const [ten_du_an, setTen_du_an] = useState(value?.ten_du_an ?? '')
+  const [tong_dien_tich, setTong_dien_tich] = useState(value?.tong_dien_tich ?? '')
+  const [chu_dau_tu, setChu_dau_tu] = useState(value?.chu_dau_tu ?? '')
+  const [hinh_thuc_chuyen_nhuong, setHinh_thuc_chuyen_nhuong] = useState(
+    value?.hinh_thuc_chuyen_nhuong ?? '',
+  )
+  const [phuong_an_thanh_toan, setPhuong_an_thanh_toan] = useState(
+    value?.phuong_an_thanh_toan ?? '',
+  )
+  const [hien_trang_phap_ly, setHien_trang_phap_ly] = useState(value?.hien_trang_phap_ly ?? [])
+  const [gia_ban, setGia_ban] = useState(value?.gia_ban ?? '')
+  const [hoa_hong, setHoa_hong] = useState(value?.hoa_hong ?? '')
+  const [nguon, setNguon] = useState(value?.nguon ?? '')
+  const [note, setNote] = useState(value?.note ?? '')
+  const [file_media_raw, setFile_media_raw] = useState(value?.file_media_raw ?? '')
 
   useEffect(() => {
     data.current = {

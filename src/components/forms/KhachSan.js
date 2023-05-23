@@ -4,29 +4,31 @@
 import { CFormInput, CFormSelect, CInputGroup, CInputGroupText } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 
-export default function KhachSan({ data }) {
-  const [ten_ks, setTen_ks] = useState('')
-  const [so_sao, setSo_sao] = useState('')
-  const [phap_ly, setPhap_ly] = useState('')
-  const [khac, setKhac] = useState('')
-  const [ma_lo, setMa_lo] = useState('')
-  const [so_to, setSo_to] = useState('')
-  const [so_thua, setSo_thua] = useState('')
-  const [trang_thai, setTrang_thai] = useState('')
-  const [tong_dien_tich, setTong_dien_tich] = useState('')
-  const [dien_tich_san, setDien_tich_san] = useState('')
-  const [so_tang, setSo_tang] = useState('')
-  const [so_phong, setSo_phong] = useState('')
-  const [muc_dich_su_dung_dat_khach_san, setMuc_dich_su_dung_dat_khach_san] = useState('')
-  const [chu_so_huu, setChu_so_huu] = useState('')
-  const [doanh_thu_thang, setDoanh_thu_thang] = useState('')
-  const [loi_nhuan_thang, setLoi_nhuan_thang] = useState('')
-  const [dinh_vi, setDinh_vi] = useState('')
-  const [gia_ban, setGia_ban] = useState('')
-  const [hoa_hong, setHoa_hong] = useState('')
-  const [nguon, setNguon] = useState('')
-  const [note, setNote] = useState('')
-  const [file_media_raw, setFile_media_raw] = useState('')
+export default function KhachSan({ data, value }) {
+  const [ten_ks, setTen_ks] = useState(value?.ten_ks ?? '')
+  const [so_sao, setSo_sao] = useState(value?.so_sao ?? '')
+  const [phap_ly, setPhap_ly] = useState(value?.phap_ly ?? '')
+  const [khac, setKhac] = useState(value?.phap_ly_info?.khac ?? '')
+  const [ma_lo, setMa_lo] = useState(value?.phap_ly_info?.ma_lo ?? '')
+  const [so_to, setSo_to] = useState(value?.phap_ly_info?.so_to ?? '')
+  const [so_thua, setSo_thua] = useState(value?.phap_ly_info?.so_thua ?? '')
+  const [trang_thai, setTrang_thai] = useState(value?.trang_thai ?? '')
+  const [tong_dien_tich, setTong_dien_tich] = useState(value?.tong_dien_tich ?? '')
+  const [dien_tich_san, setDien_tich_san] = useState(value?.dien_tich_san ?? '')
+  const [so_tang, setSo_tang] = useState(value?.so_tang ?? '')
+  const [so_phong, setSo_phong] = useState(value?.so_phong ?? '')
+  const [muc_dich_su_dung_dat_khach_san, setMuc_dich_su_dung_dat_khach_san] = useState(
+    value?.muc_dich_su_dung_dat_khach_san ?? '',
+  )
+  const [chu_so_huu, setChu_so_huu] = useState(value?.chu_so_huu ?? '')
+  const [doanh_thu_thang, setDoanh_thu_thang] = useState(value?.doanh_thu_thang ?? '')
+  const [loi_nhuan_thang, setLoi_nhuan_thang] = useState(value?.loi_nhuan_thang ?? '')
+  const [dinh_vi, setDinh_vi] = useState(value?.dinh_vi ?? '')
+  const [gia_ban, setGia_ban] = useState(value?.gia_ban ?? '')
+  const [hoa_hong, setHoa_hong] = useState(value?.hoa_hong ?? '')
+  const [nguon, setNguon] = useState(value?.nguon ?? '')
+  const [note, setNote] = useState(value?.note ?? '')
+  const [file_media_raw, setFile_media_raw] = useState(value?.file_media_raw ?? '')
 
   useEffect(() => {
     data.current = {
