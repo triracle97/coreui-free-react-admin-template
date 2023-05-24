@@ -17,7 +17,13 @@ import {
   CAlert,
   CFormSelect,
 } from '@coreui/react'
-import {productType, khuVuc, phapLy} from "../../constant";
+import {
+  productType,
+  khuVuc,
+  phapLy,
+  dien_tich_filter,
+  phapLyDuAn
+} from '../../constant';
 
 const FilterProductModal = ({ handleSubmit }, ref) => {
   const [visible, setVisible] = useState(false)
@@ -25,6 +31,8 @@ const FilterProductModal = ({ handleSubmit }, ref) => {
   const [loai_sp, set_loai_sp] = useState([]);
   const [khu_vuc, set_khu_vuc] = useState([]);
   const [phap_ly, set_phap_ly] = useState([]);
+  const [dien_tich, set_dien_tich] = useState([]);
+  const [phap_ly_du_an, set_phap_ly_du_an] = useState([]);
 
   const handleProduct = (e) => {
     const { value, checked } = e.target
@@ -60,6 +68,17 @@ const FilterProductModal = ({ handleSubmit }, ref) => {
     }
   }
 
+  const handleAddToArray = (e, setFn) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setFn((pre) => [...pre, value])
+    } else {
+      setFn((pre) => {
+        return [...pre.filter((v) => v !== value)]
+      })
+    }
+  }
+
   useImperativeHandle(ref, () => ({
     show: () => {
       setVisible(true)
@@ -71,7 +90,9 @@ const FilterProductModal = ({ handleSubmit }, ref) => {
     if (ten_sp.length) filter.ten_san_pham = ten_sp
     if (khu_vuc.length) filter.khu_vuc = khu_vuc
     if (loai_sp.length) filter.loai_sp = loai_sp
-    if (phap_ly.length) phap_ly.maxBudget = phap_ly
+    if (phap_ly.length) filter.phap_ly = phap_ly
+    if (dien_tich.length) filter.dien_tich = dien_tich
+    if (phap_ly_du_an.length) filter.phap_ly_du_an = phap_ly_du_an
     handleSubmit(filter)
     setVisible(false)
   }
@@ -183,6 +204,68 @@ const FilterProductModal = ({ handleSubmit }, ref) => {
                     onChange={handlePhapLy}
                   />
                   <label>{phapLy.name}</label>
+                </div>
+              )
+            })}
+          </CInputGroup>
+          <CInputGroup>
+            <div
+              className="w-100 p-3 rounded"
+              style={{
+                backgroundColor: '#d8dbe0',
+                border: '1px solid #b1b7c1',
+                height: '38px',
+                lineHeight: '2px',
+              }}
+            >
+              Diện tích
+            </div>
+            {dien_tich_filter.map((dientich, index) => {
+              return (
+                <div
+                  key={index}
+                  className="input-group align-items-center"
+                  style={{ maxWidth: '200px' }}>
+                  <input
+                    checked={dien_tich.includes(dientich.value)}
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value={dientich.value}
+                    onChange={(e) => handleAddToArray(e, set_dien_tich)}
+                  />
+                  <label>{dientich.name}</label>
+                </div>
+              )
+            })}
+          </CInputGroup>
+          <CInputGroup>
+            <div
+              className="w-100 p-3 rounded"
+              style={{
+                backgroundColor: '#d8dbe0',
+                border: '1px solid #b1b7c1',
+                height: '38px',
+                lineHeight: '2px',
+              }}
+            >
+              Pháp lý dự án (chỉ cho dự án)
+            </div>
+            {phapLyDuAn.map((dienTich, index) => {
+              return (
+                <div
+                  key={index}
+                  className="input-group align-items-center"
+                  style={{ maxWidth: '300px' }}>
+                  <input
+                    checked={phap_ly_du_an.includes(dienTich.value)}
+                    style={{ width: '16px', height: '16px' }}
+                    className="mx-1"
+                    type="checkbox"
+                    value={dienTich.value}
+                    onChange={(e) => handleAddToArray(e, set_phap_ly_du_an)}
+                  />
+                  <label>{dienTich.name}</label>
                 </div>
               )
             })}
