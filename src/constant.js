@@ -30,3 +30,17 @@ export const phapLy = [
   { value: 'giay_tay', name: 'Giấy tay' },
   { value: 'others', name: 'Khác' },
 ]
+
+export const dien_tich_filter = [
+  { value: '<1000m2', name : '<1000m2' },
+  { value: '1000-10000m2', name: '1000-10000m2' },
+  { value: '>10000m2', name: '>10000m2' }
+]
+
+export const phapLyDuAn = [
+  { value: 'chap_thuan_chu_truong_dau_tu', name: 'Chấp thuận chủ trương đầu tư' },
+  { value: 'qui_hoach_1/500', name: 'Quy hoạch 1/500' },
+  { value: 'giao_dat&chuyen_muc_dich_sdd', name: 'Giao đất chuyển mục đích sdđ' },
+  { value: 'hoan_thanh_nghia_vu_tai_chinh', name: 'Hoàn thành nghĩa vụ tài chính' },
+  { value: 'giay_phep_xay_dung', name: 'Giấy phép xây dựng' },
+]
