@@ -15,7 +15,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 
-import CustomerCreateModel from '../modal/CustomerCreateModel'
+import CustomerCreateModal from '../modal/CustomerCreateModal'
 import Actions from './Actions'
 import FilterCustomerModal from '../modal/FilterCustomerModal'
 import EditCustomerModal from '../modal/EditCustomerModal'
@@ -141,7 +141,7 @@ const Customer = () => {
           <span aria-hidden="true">&raquo;</span>
         </CPaginationItem>
       </CPagination>
-      <CustomerCreateModel ref={createUserModalRef} />
+      <CustomerCreateModal ref={createUserModalRef} />
       <FilterCustomerModal handleSubmit={handleFilterSubmit} ref={filterUserModalRef} />
     </CRow>
   )

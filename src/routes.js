@@ -54,6 +54,7 @@ const User = React.lazy(() => import('./views/data/User'))
 const File = React.lazy(() => import('./views/data/File'))
 const Customer = React.lazy(() => import('./views/data/Customer'))
 const Product = React.lazy(() => import('./views/data/Product'))
+const Template = React.lazy(() => import('./views/data/Template'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -104,6 +105,7 @@ const routes = [
   { path: '/file', name: 'File', element: File },
   { path: '/customer', name: 'Customer', element: Customer },
   { path: '/product', name: 'Product', element: Product },
+  { path: '/template', name: 'Template', element: Template },
 ]
 
 export default routes
