@@ -18,7 +18,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import React, { useEffect, useRef, useState } from 'react'
-import ProductCreateModel from '../modal/ProductCreateModel'
+import ProductCreateModal from '../modal/ProductCreateModal'
 import axios from 'axios'
 import { BACKEND_HOST } from 'src/constant'
 import Cookies from 'js-cookie'
@@ -30,7 +30,7 @@ import AddLinkProductModal from '../modal/AddLinkProductModal'
 import { Link } from 'react-router-dom'
 
 export default function Product() {
-  const createProductModelRef = useRef()
+  const createProductModalRef = useRef()
   const inforModalRef = useRef()
   const editProductModalRef = useRef()
   const filterProductModalRef = useRef()
@@ -41,7 +41,7 @@ export default function Product() {
     editProductModalRef.current?.passData(item)
   }
   const openCreateProduct = () => {
-    createProductModelRef.current?.show()
+    createProductModalRef.current?.show()
   }
   const openInforProduct = (item) => {
     inforModalRef.current?.show()
@@ -286,7 +286,7 @@ export default function Product() {
           <span aria-hidden="true">&raquo;</span>
         </CPaginationItem>
       </CPagination>
-      <ProductCreateModel ref={createProductModelRef} getProductsData={getProductsData} />
+      <ProductCreateModal ref={createProductModalRef} getProductsData={getProductsData} />
       <FilterProductModal ref={filterProductModalRef} handleSubmit={handleFilterSubmit} />
       <AddLinkProductModal ref={addLinkProductModalRef} getProductsData={getProductsData} />
     </CRow>

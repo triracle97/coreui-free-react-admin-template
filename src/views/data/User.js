@@ -17,7 +17,7 @@ import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 import UserCreateModal from '../modal/UserCreateModal'
 import Actions from './Actions'
-import EditUserModel from '../modal/EditUserModel'
+import EditUserModal from '../modal/EditUserModal'
 
 const User = () => {
   const [users, setUsers] = useState([])
@@ -26,7 +26,7 @@ const User = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   const createUserModalRef = useRef()
-  const editUserModelRef = useRef()
+  const editUserModalRef = useRef()
 
   const navigate = useNavigate()
 
@@ -63,8 +63,8 @@ const User = () => {
     createUserModalRef.current?.show()
   }
   const openEditUser = (item) => {
-    editUserModelRef.current?.show()
-    editUserModelRef.current?.passData(item)
+    editUserModalRef.current?.show()
+    editUserModalRef.current?.passData(item)
   }
 
   const goToNextPage = () => {
@@ -109,7 +109,7 @@ const User = () => {
               </CTableRow>
             )
           })}
-          <EditUserModel ref={editUserModelRef} />
+          <EditUserModal ref={editUserModelRef} />
         </CTableBody>
       </CTable>
       <CPagination pages={10} aria-label="Page navigation example">

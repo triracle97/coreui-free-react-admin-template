@@ -34,7 +34,7 @@ import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 import provinces_item from './Provinces.json'
 
-const CustomerCreateModel = ({}, ref) => {
+const CustomerCreateModal = ({}, ref) => {
   const [visible, setVisible] = useState(false)
   const [phone, setPhone] = useState('')
   const [name, setName] = useState('')
@@ -379,4 +379,4 @@ const CustomerCreateModel = ({}, ref) => {
   )
 }
 
-export default React.forwardRef(CustomerCreateModel)
+export default React.forwardRef(CustomerCreateModal)

@@ -1,6 +1,4 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
 import React, { useState, useImperativeHandle, useEffect } from 'react'
 import {
   CButton,
@@ -11,40 +9,46 @@ import {
   CModalTitle,
   CForm,
   CInputGroupText,
+  CFormTextarea,
   CFormInput,
   CInputGroup,
-  CAlert,
+  CAlert
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser, cilText } from '@coreui/icons'
+import { cilUser } from '@coreui/icons'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 
-const EditUserModel = ({}, ref) => {
+const CreateTemplateModal = ({  }, ref) => {
   const [visible, setVisible] = useState(false)
+  const [name, setName] = useState('')
+  const [content, setContent] = useState('')
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [data, setData] = useState({})
-  const [username, setUsername] = useState(null)
-  const [name, setName] = useState(null)
-  const [password, setPassword] = useState('')
 
   useImperativeHandle(ref, () => ({
     show: () => {
       setVisible(true)
     },
-    passData: (item) => {
-      setData(item)
-    },
   }))
+
+  useEffect(() => {
+    setTimeout(() => {
+      setError(false);
+      setSuccess(false);
+    }, 2000)
+  }, [error, success])
 
   const handleSubmit = () => {
     axios
-      .patch(`${BACKEND_HOST}/user/${data.id}`, {
-        values: { name, username, password },
+      .post(`${BACKEND_HOST}/template/create`, {
+        name,
+        content
       })
       .then((res) => {
         setSuccess(true)
+        setName('')
+        setContent('')
       })
       .catch((err) => {
         console.log('Error', err)
@@ -53,9 +57,9 @@ const EditUserModel = ({}, ref) => {
   }
 
   return (
-    <CModal visible={visible} onClose={() => setVisible(false)}>
+    <CModal size={'xl'} visible={visible} onClose={() => setVisible(false)}>
       <CModalHeader closeButton>
-        <CModalTitle>Edit User</CModalTitle>
+        <CModalTitle>Create Template</CModalTitle>
       </CModalHeader>
       <CModalBody>
         {error && <CAlert color="danger">{'Error'}</CAlert>}
@@ -66,33 +70,18 @@ const EditUserModel = ({}, ref) => {
               <CIcon icon={cilUser} />
             </CInputGroupText>
             <CFormInput
-              value={username ?? data.username}
-              onChange={(event) => setUsername(event.target.value)}
-              placeholder="Username"
-              autoComplete="username"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Tên template"
             />
           </CInputGroup>
           <CInputGroup className="mb-3">
-            <CInputGroupText>
-              <CIcon icon={cilLockLocked} />
-            </CInputGroupText>
-            <CFormInput
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </CInputGroup>
-          <CInputGroup className="mb-4">
-            <CInputGroupText>
-              <CIcon icon={cilText} />
-            </CInputGroupText>
-            <CFormInput
-              type="name"
-              placeholder="Name"
-              value={name ?? data.name}
-              onChange={(event) => setName(event.target.value)}
-            />
+            <CFormTextarea
+              style={{
+                height: 200
+              }}
+              onChange={(event) => setContent(event.target.value)}
+              placeholder={'Nội dung template'}/>
           </CInputGroup>
         </CForm>
       </CModalBody>
@@ -101,11 +90,11 @@ const EditUserModel = ({}, ref) => {
           Cancel
         </CButton>
         <CButton color="primary" onClick={handleSubmit}>
-          Update
+          Create
         </CButton>
       </CModalFooter>
     </CModal>
   )
 }
 
-export default React.forwardRef(EditUserModel)
+export default React.forwardRef(CreateTemplateModal)

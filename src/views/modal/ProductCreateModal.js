@@ -25,7 +25,7 @@ import KhachSan from 'src/components/forms/KhachSan'
 import DuAn from 'src/components/forms/DuAn'
 import DatTs from 'src/components/forms/DatTs'
 
-const ProductCreateModel = ({ getProductsData }, ref) => {
+const ProductCreateModal = ({ getProductsData }, ref) => {
   const [visible, setVisible] = useState(false)
   const [ten_san_pham, setTen_san_pham] = useState('')
   const [nguon_sp, setNguon_sp] = useState('')
@@ -146,16 +146,6 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
               <option value="kien-giang">Kiên Giang</option>
               <option value="khac">Khác</option>
             </CFormSelect>
-            {/* {khu_vuc === '' ? (
-              <CFormInput
-                type="text"
-                value={khu_vuc_khac}
-                placeholder="nhập tỉnh"
-                onChange={(e) => setKhu_vuc_khac(e.target.value)}
-              />
-            ) : (
-              <></>
-            )} */}
           </CInputGroup>
           <CInputGroup className="mb-3">
             <CInputGroupText>Địa chỉ</CInputGroupText>
@@ -200,4 +190,4 @@ const ProductCreateModel = ({ getProductsData }, ref) => {
   )
 }
 
-export default React.forwardRef(ProductCreateModel)
+export default React.forwardRef(ProductCreateModal)
