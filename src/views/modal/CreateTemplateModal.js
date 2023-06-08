@@ -12,14 +12,14 @@ import {
   CFormTextarea,
   CFormInput,
   CInputGroup,
-  CAlert
+  CAlert,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilUser } from '@coreui/icons'
 import axios from 'axios'
 import { BACKEND_HOST } from '../../constant'
 
-const CreateTemplateModal = ({  }, ref) => {
+const CreateTemplateModal = ({}, ref) => {
   const [visible, setVisible] = useState(false)
   const [name, setName] = useState('')
   const [content, setContent] = useState('')
@@ -34,8 +34,8 @@ const CreateTemplateModal = ({  }, ref) => {
 
   useEffect(() => {
     setTimeout(() => {
-      setError(false);
-      setSuccess(false);
+      setError(false)
+      setSuccess(false)
     }, 2000)
   }, [error, success])
 
@@ -43,7 +43,7 @@ const CreateTemplateModal = ({  }, ref) => {
     axios
       .post(`${BACKEND_HOST}/template/create`, {
         name,
-        content
+        content,
       })
       .then((res) => {
         setSuccess(true)
@@ -78,10 +78,11 @@ const CreateTemplateModal = ({  }, ref) => {
           <CInputGroup className="mb-3">
             <CFormTextarea
               style={{
-                height: 200
+                height: 200,
               }}
               onChange={(event) => setContent(event.target.value)}
-              placeholder={'Nội dung template'}/>
+              placeholder={'Nội dung template'}
+            />
           </CInputGroup>
         </CForm>
       </CModalBody>

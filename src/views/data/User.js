@@ -109,7 +109,7 @@ const User = () => {
               </CTableRow>
             )
           })}
-          <EditUserModal ref={editUserModelRef} />
+          <EditUserModal ref={editUserModalRef} />
         </CTableBody>
       </CTable>
       <CPagination pages={10} aria-label="Page navigation example">

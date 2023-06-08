@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react'
 import {
   CButton,
   CCol,
@@ -8,28 +8,28 @@ import {
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
-  CTableRow
-} from '@coreui/react';
-import CreateTemplateModal from '../modal/CreateTemplateModal';
-import axios from 'axios';
-import { BACKEND_HOST } from '../../constant';
-import Actions from './Actions';
-import EditTemplateModal from '../modal/EditTemplateModal';
+  CTableRow,
+} from '@coreui/react'
+import CreateTemplateModal from '../modal/CreateTemplateModal'
+import axios from 'axios'
+import { BACKEND_HOST } from '../../constant'
+import Actions from './Actions'
+import EditTemplateModal from '../modal/EditTemplateModal'
 
 export default function Template() {
-  const [templates, setTemplates] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [templates, setTemplates] = useState([])
+  const [selectedItem, setSelectedItem] = useState(null)
 
   const createModalRef = useRef()
   const editModalRef = useRef()
 
   const openCreateTemplate = () => {
-    createModalRef.current.show();
+    createModalRef.current.show()
   }
 
   useEffect(() => {
-    getTemplate();
-  }, []);
+    getTemplate()
+  }, [])
 
   const getTemplate = () => {
     axios
@@ -45,7 +45,7 @@ export default function Template() {
   }
 
   const openEdit = (item) => {
-    console.log('123123');
+    console.log('123123')
     setSelectedItem(item)
     editModalRef.current.show()
   }
@@ -53,17 +53,16 @@ export default function Template() {
   return (
     <CRow>
       <CCol>
-        <CButton onClick={openCreateTemplate} className='px-4 mb-3'>
+        <CButton onClick={openCreateTemplate} className="px-4 mb-3">
           Create Template
         </CButton>
       </CCol>
-      <CreateTemplateModal
-        ref={createModalRef}/>
+      <CreateTemplateModal ref={createModalRef} />
       <CTable>
         <CTableHead>
           <CTableRow>
-            <CTableHeaderCell scope='col'>Action</CTableHeaderCell>
-            <CTableHeaderCell scope='col'>Name</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Name</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -72,9 +71,11 @@ export default function Template() {
               <CTableRow key={index}>
                 <CTableDataCell style={{ width: '200px' }}>
                   <Actions
-                    openEdit={() => { openEdit(item) }}
+                    openEdit={() => {
+                      openEdit(item)
+                    }}
                     item={item}
-                    content='template'
+                    content="template"
                   />
                 </CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
@@ -83,9 +84,7 @@ export default function Template() {
           })}
         </CTableBody>
       </CTable>
-      <EditTemplateModal
-        ref={editModalRef}
-        item={selectedItem}/>
+      <EditTemplateModal ref={editModalRef} item={selectedItem} />
     </CRow>
   )
 }

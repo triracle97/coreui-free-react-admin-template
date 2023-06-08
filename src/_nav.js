@@ -62,7 +62,7 @@ const _nav = [
     badge: {
       color: 'info',
     },
-  }
+  },
   // // {
   // //   component: CNavTitle,
   // //   name: 'Theme',

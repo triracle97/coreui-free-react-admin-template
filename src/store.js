@@ -2,7 +2,7 @@ import { createStore } from 'redux'
 
 const initialState = {
   sidebarShow: true,
-  authToken: null
+  authToken: null,
 }
 
 const changeState = (state = initialState, { type, ...rest }) => {

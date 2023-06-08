@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 export default function Auth() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const token = Cookies.get('authToken');
+    const token = Cookies.get('authToken')
     if (!token) {
       setTimeout(() => {
-        navigate('/login');
+        navigate('/login')
       }, 100)
     }
-  }, []);
+  }, [])
 
-  return null;
+  return null
 }

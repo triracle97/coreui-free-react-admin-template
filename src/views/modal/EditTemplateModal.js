@@ -49,7 +49,7 @@ const EditTemplateModal = ({ item }, ref) => {
     axios
       .patch(`${BACKEND_HOST}/template/edit`, {
         name,
-        content
+        content,
       })
       .then((res) => {
         setSuccess(true)
@@ -84,11 +84,12 @@ const EditTemplateModal = ({ item }, ref) => {
           <CInputGroup className="mb-3">
             <CFormTextarea
               style={{
-                height: 200
+                height: 200,
               }}
               value={content}
               onChange={(event) => setContent(event.target.value)}
-              placeholder={'Nội dung template'}/>
+              placeholder={'Nội dung template'}
+            />
           </CInputGroup>
         </CForm>
       </CModalBody>
