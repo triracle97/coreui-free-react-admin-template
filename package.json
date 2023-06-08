@@ -16,7 +16,7 @@
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.js\"",
-    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "start": " react-scripts start",
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand"
@@ -40,6 +40,7 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
+    "react-select": "^5.7.3",
     "redux": "4.2.1",
     "simplebar-react": "^2.4.3"
   },

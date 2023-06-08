@@ -25,13 +25,16 @@ import Cookies from 'js-cookie'
 import { getFormatTime } from '../../utils/index'
 import InforProductModal from '../modal/InforProductModal'
 import EditProductModal from '../modal/EditProductModal'
-import FilterProductModal from '../modal/FilterProductModal';
+import FilterProductModal from '../modal/FilterProductModal'
+import AddLinkProductModal from '../modal/AddLinkProductModal'
+import { Link } from 'react-router-dom'
 
 export default function Product() {
   const createProductModelRef = useRef()
   const inforModalRef = useRef()
   const editProductModalRef = useRef()
   const filterProductModalRef = useRef()
+  const addLinkProductModalRef = useRef()
 
   const openEditProductModal = (item) => {
     editProductModalRef.current?.show()
@@ -44,6 +47,10 @@ export default function Product() {
     inforModalRef.current?.show()
     inforModalRef.current?.passData(item)
   }
+  const openAddLinkProduct = (item) => {
+    addLinkProductModalRef.current?.show()
+    addLinkProductModalRef.current?.passData(item)
+  }
   const [limit, setLimit] = useState(20)
   const [products, setProducts] = useState([])
   const [role, setRole] = useState(Cookies.get('role'))
@@ -52,7 +59,11 @@ export default function Product() {
   const [maxPage, setMaxPage] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
   const [deleteid, setDeleteId] = useState('')
-  const [filter, setFilter] = useState({});
+  const [filter, setFilter] = useState({})
+  const pro = [
+    { id: 1, name: 'Sản phẩm 1', price: 10 },
+    { id: 2, name: 'Sản phẩm 2', price: 20 },
+  ]
 
   useEffect(() => {
     getProductsData()
@@ -72,7 +83,7 @@ export default function Product() {
         params: {
           limit,
           offset,
-          filter
+          filter,
         },
       })
       .then((res) => {
@@ -136,8 +147,8 @@ export default function Product() {
   }
 
   const handleFilterSubmit = (filter) => {
-    setCurrentPage(1);
-    setFilter(filter);
+    setCurrentPage(1)
+    setFilter(filter)
   }
 
   return (
@@ -167,13 +178,19 @@ export default function Product() {
               <CTableDataCell>
                 {role === 'admin' ? (
                   <>
-                    <CButton
-                      color="success"
-                      className="mx-1"
-                      onClick={() => changeStatus(p._id, 'approved')}
-                    >
-                      Accept
-                    </CButton>
+                    {p.status === 'approved' ? (
+                      <CButton color="success" className="mx-1">
+                        <Link to={{ pathname: `/product/${p._id}` }}>Send mess</Link>
+                      </CButton>
+                    ) : (
+                      <CButton
+                        color="success"
+                        className="mx-1"
+                        onClick={() => changeStatus(p._id, 'approved')}
+                      >
+                        Accept
+                      </CButton>
+                    )}
                     <CButton
                       color="secondary"
                       className="mx-1"
@@ -212,6 +229,9 @@ export default function Product() {
                 </CButton>
                 <CButton color="info" className="mx-1" onClick={() => openInforProduct(p)}>
                   Info
+                </CButton>
+                <CButton color="warning" className="mx-1" onClick={() => openAddLinkProduct(p)}>
+                  Add link product
                 </CButton>
               </CTableDataCell>
               <CTableDataCell>{p.ten_san_pham}</CTableDataCell>
@@ -267,7 +287,8 @@ export default function Product() {
         </CPaginationItem>
       </CPagination>
       <ProductCreateModel ref={createProductModelRef} getProductsData={getProductsData} />
-      <FilterProductModal ref={filterProductModalRef} handleSubmit={handleFilterSubmit}/>
+      <FilterProductModal ref={filterProductModalRef} handleSubmit={handleFilterSubmit} />
+      <AddLinkProductModal ref={addLinkProductModalRef} getProductsData={getProductsData} />
     </CRow>
   )
 }

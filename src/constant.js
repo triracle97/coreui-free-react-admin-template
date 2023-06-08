@@ -32,9 +32,9 @@ export const phapLy = [
 ]
 
 export const dien_tich_filter = [
-  { value: '<1000m2', name : '<1000m2' },
+  { value: '<1000m2', name: '<1000m2' },
   { value: '1000-10000m2', name: '1000-10000m2' },
-  { value: '>10000m2', name: '>10000m2' }
+  { value: '>10000m2', name: '>10000m2' },
 ]
 
 export const phapLyDuAn = [
