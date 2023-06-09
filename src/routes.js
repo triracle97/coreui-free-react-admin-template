@@ -107,7 +107,7 @@ const routes = [
   { path: '/customer', name: 'Customer', element: Customer },
   { path: '/product', name: 'Product', element: Product },
   { path: '/template', name: 'Template', element: Template },
-  { path: '/product/:id', name: 'SendMessage', element: SendMessage },
+  { path: '/sendMess', name: 'SendMessage', element: SendMessage },
 ]
 
 export default routes

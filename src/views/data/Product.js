@@ -27,7 +27,7 @@ import InforProductModal from '../modal/InforProductModal'
 import EditProductModal from '../modal/EditProductModal'
 import FilterProductModal from '../modal/FilterProductModal'
 import AddLinkProductModal from '../modal/AddLinkProductModal'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 export default function Product() {
   const createProductModalRef = useRef()
@@ -180,7 +180,18 @@ export default function Product() {
                   <>
                     {p.status === 'approved' ? (
                       <CButton color="success" className="mx-1">
-                        <Link to={{ pathname: `/product/${p._id}` }}>Send mess</Link>
+                        <NavLink
+                          to={{
+                            pathname: `/sendMess`
+                          }}
+                          state={{
+                            productProps: {
+                              productId: p._id,
+                              productName: p.ten_san_pham,
+                              productLink: p.product_link
+                            }
+                          }}
+                        >Send mess</NavLink>
                       </CButton>
                     ) : (
                       <CButton

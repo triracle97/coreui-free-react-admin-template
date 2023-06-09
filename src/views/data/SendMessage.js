@@ -12,6 +12,7 @@ import {
   CFormCheck,
   CFormInput,
   CFormSelect,
+  CFormTextarea,
   CInputGroup,
   CInputGroupText,
   CRow,
@@ -24,14 +25,51 @@ import {
 } from '@coreui/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import axios from 'axios';
+import { BACKEND_HOST } from '../../constant';
 
 export default function SendMessage(props) {
+  const [productName, setProductName] = useState('')
+  const [productLink, setProductLink] = useState('')
+  const [productId, setProductId] = useState('')
+  const [templates, setTemplates] = useState([])
+  const [customers, setCustomers] = useState([])
   const [goodwill, setGoodWill] = useState(null)
   const [intimacy, setIntimacy] = useState(null)
   const [minBudget, setMinBudget] = useState(null)
   const [maxBudget, setMaxBudget] = useState(null)
   const [caringArea, setCaringArea] = useState([])
   const [caringProduct, setCaringProduct] = useState([])
+  const [templateContent, setTemplateContent] = useState('');
+  const [selectedCustomers, setSelectedCustomers] = useState([]);
+  const [shouldSelectAll, setShouldSelectAll] = useState(false);
+
+  const location = useLocation()
+
+  useEffect(() => {
+    setProductName(location?.state?.productProps?.productName)
+    setProductLink(location?.state?.productProps?.productLink)
+    setProductId(location?.state?.productProps?.productId)
+    getTemplate()
+  }, [])
+
+  const getTemplate = () => {
+    axios
+      .get(`${BACKEND_HOST}/template`)
+      .then((res) => {
+        const newTemplate = res.data.templates
+
+        setTemplates(newTemplate)
+      })
+      .catch((err) => {
+        console.log('Error while getting Product', err)
+      })
+  }
+
+  const selectTemplate = (template) => {
+    const foundTemplate = templates.find(_template => _template._id.toString() === template.toString())
+    setTemplateContent(foundTemplate.content);
+  }
 
   function handleArea(e) {
     const { value, checked } = e.target
@@ -44,9 +82,9 @@ export default function SendMessage(props) {
       })
     }
   }
+
   function handleProduct(e) {
     const { value, checked } = e.target
-
     if (checked) {
       setCaringProduct((pre) => [...pre, value])
     } else {
@@ -55,20 +93,77 @@ export default function SendMessage(props) {
       })
     }
   }
+
+  const handleFilterSubmit = () => {
+    const filter = {}
+    if (goodwill) filter.goodwill = goodwill
+    if (intimacy) filter.intimacy = intimacy
+    if (minBudget) filter.minBudget = minBudget
+    if (maxBudget) filter.maxBudget = maxBudget
+    if (caringArea.length) filter.caringArea = caringArea
+    if (caringProduct.length) filter.caringProduct = caringProduct
+    axios
+      .get(`${BACKEND_HOST}/customer/filter`, {
+        params: {
+          ...filter,
+          limit: 10000
+        },
+      })
+      .then((res) => {
+        if (res.data?.customers) {
+          setCustomers(res.data?.customers)
+        }
+      })
+  }
+
+  const selectCustomer = (customer) => {
+    const foundCustomer = selectedCustomers.findIndex(_customer => _customer._id === customer._id);
+    if (foundCustomer === -1) {
+      setSelectedCustomers([...selectedCustomers, customer]);
+    } else {
+      setSelectedCustomers(oldValue => {
+        oldValue.splice(foundCustomer, 1);
+        return [...oldValue]
+      });
+    }
+  }
+
+  const toggleAll = () => {
+    if (!shouldSelectAll) {
+      setShouldSelectAll(true);
+      setSelectedCustomers(customers);
+    } else {
+      setShouldSelectAll(false);
+      setSelectedCustomers([]);
+    }
+  }
+
+  const handleSend = () => {
+    const encodedContent = btoa(templateContent);
+  }
+
   return (
     <CContainer>
       <CRow>
         <CCol style={{ border: '1px solid black' }}>
           <div>
-            <p>Name: {} </p>
+            <p>Name: {productName} </p>
           </div>
-          <div></div>
-          <CFormSelect size="sm" className="mb-3" aria-label="Small select example">
+          <div>
+            <p>Link: {productLink} </p>
+          </div>
+          <CFormSelect
+            onChange={(e) => selectTemplate(e.target.value)}
+            size="sm" className="mb-3" aria-label="Small select example">
             <option>Choose template</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            {templates.map((template, index) => (
+              <option key={index} value={template._id}>{template.name}</option>
+            ))}
           </CFormSelect>
+          {templateContent.length > 0 &&
+            <CFormTextarea
+              value={templateContent}/>
+          }
         </CCol>
         <CCol style={{ border: '1px solid black' }}>
           <CForm>
@@ -261,7 +356,7 @@ export default function SendMessage(props) {
               </CInputGroup>
             </CInputGroup>
           </CForm>
-          <CButton color="primary" class="btn btn-primary mb-1">
+          <CButton onClick={handleFilterSubmit} color="primary" className="btn btn-primary mb-1">
             Filter
           </CButton>
         </CCol>
@@ -272,7 +367,7 @@ export default function SendMessage(props) {
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell scope="col">
-                  <CFormCheck inline id="inlineCheckbox1" value="" />
+                  <CFormCheck onClick={toggleAll} onChange={() => {}} checked={shouldSelectAll} inline id="inlineCheckbox1" value="" />
                 </CTableHeaderCell>
                 <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
@@ -288,22 +383,29 @@ export default function SendMessage(props) {
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              <CTableRow>
-                <CTableDataCell style={{ width: '200px' }}>
-                  <CFormCheck inline id="inlineCheckbox1" value="" />
-                </CTableDataCell>
-                <CTableDataCell>Name</CTableDataCell>
-                <CTableDataCell>phone</CTableDataCell>
-                <CTableDataCell>age</CTableDataCell>
-                <CTableDataCell>job</CTableDataCell>
-                <CTableDataCell>user arena</CTableDataCell>
-                <CTableDataCell>goodwill</CTableDataCell>
-                <CTableDataCell>intimacy</CTableDataCell>
-                <CTableDataCell>minBudget</CTableDataCell>
-                <CTableDataCell>maxBudget</CTableDataCell>
-                <CTableDataCell>caringArea</CTableDataCell>
-                <CTableDataCell>caringProduct</CTableDataCell>
-              </CTableRow>
+              {customers.map((customer, index) => {
+                const isChecked = !!selectedCustomers.find(_customer => _customer._id === customer._id)
+                return  (
+                  <CTableRow key={index}>
+                    <CTableDataCell style={{ width: '200px' }}>
+                      <CFormCheck checked={isChecked} onClick={() => selectCustomer(customer)} onChange={() => {}}/>
+                    </CTableDataCell>
+                    <CTableDataCell>{customer.name}</CTableDataCell>
+                    <CTableDataCell>{customer.phone}</CTableDataCell>
+                    <CTableDataCell>{customer.age}</CTableDataCell>
+                    <CTableDataCell>{customer.job}</CTableDataCell>
+                    <CTableDataCell>{customer.userArea}</CTableDataCell>
+                    <CTableDataCell>{customer.goodwill}</CTableDataCell>
+                    <CTableDataCell>{customer.intimacy}</CTableDataCell>
+                    <CTableDataCell>{customer.minBudget}</CTableDataCell>
+                    <CTableDataCell>{customer.maxBudget}</CTableDataCell>
+                    <CTableDataCell>{customer.caringArea.toString()}</CTableDataCell>
+                    <CTableDataCell>{customer.caringProduct.toString()}</CTableDataCell>
+                  </CTableRow>
+                )})}
+                <CButton onClick={handleSend} color="primary" className="btn btn-primary mt-3">
+                  Send
+                </CButton>
             </CTableBody>
           </CTable>
         </CCol>
