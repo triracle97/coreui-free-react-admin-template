@@ -1,6 +1,11 @@
 import {
   CButton,
   CCol,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
   CPagination,
   CPaginationItem,
   CRow,
@@ -25,6 +30,8 @@ const Customer = () => {
   const [limit, setLimit] = useState(20)
   const [offset, setOffset] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(false)
 
   const createUserModalRef = useRef()
   const filterUserModalRef = useRef()
@@ -60,6 +67,26 @@ const Customer = () => {
 
   const openCreateUser = () => {
     createUserModalRef.current?.show()
+  }
+
+  const deleteUser = (userId) => {
+    axios
+      .delete(`${BACKEND_HOST}/customer/${userId}`, {
+        method: 'DELETE',
+      })
+      .then((res) => {
+        console.log('success')
+        getCustomersData();
+      })
+      .catch((err) => {
+        console.log('Error', err)
+      })
+    setDeleteModalVisible(false);
+  }
+
+  const doAskDeleteUser = (user) => {
+    setSelectedUser(user)
+    setDeleteModalVisible(true)
   }
 
   const handleFilterSubmit = (filter) => {
@@ -110,6 +137,7 @@ const Customer = () => {
                 <CTableDataCell style={{ width: '200px' }}>
                   <Actions
                     openEdit={() => openEditCustomer(item)}
+                    openDelete={() => doAskDeleteUser(item)}
                     item={item}
                     getData={getCustomersData}
                     content="customer"
@@ -143,6 +171,20 @@ const Customer = () => {
       </CPagination>
       <CustomerCreateModal ref={createUserModalRef} />
       <FilterCustomerModal handleSubmit={handleFilterSubmit} ref={filterUserModalRef} />
+      <CModal visible={deleteModalVisible} onClose={() => setDeleteModalVisible(false)}>
+        <CModalHeader onClose={() => setDeleteModalVisible(false)}>
+          <CModalTitle>Cảnh báo</CModalTitle>
+        </CModalHeader>
+        <CModalBody>Bạn thực sự muốn xóa sản nguời dùng {selectedUser.name}</CModalBody>
+        <CModalFooter>
+          <CButton color="primary" onClick={() => deleteUser(selectedUser?._id)}>
+            Đúng
+          </CButton>
+          <CButton color="secondary" onClick={() => setDeleteModalVisible(false)}>
+            Không
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </CRow>
   )
 }
