@@ -25,8 +25,8 @@ import {
 } from '@coreui/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import axios from 'axios';
-import { BACKEND_HOST } from '../../constant';
+import axios from 'axios'
+import { BACKEND_HOST } from '../../constant'
 
 export default function SendMessage(props) {
   const [productName, setProductName] = useState('')
@@ -40,9 +40,10 @@ export default function SendMessage(props) {
   const [maxBudget, setMaxBudget] = useState(null)
   const [caringArea, setCaringArea] = useState([])
   const [caringProduct, setCaringProduct] = useState([])
-  const [templateContent, setTemplateContent] = useState('');
-  const [selectedCustomers, setSelectedCustomers] = useState([]);
-  const [shouldSelectAll, setShouldSelectAll] = useState(false);
+  const [templateContent, setTemplateContent] = useState('')
+  const [templateName, setTemplateName] = useState('')
+  const [selectedCustomers, setSelectedCustomers] = useState([])
+  const [shouldSelectAll, setShouldSelectAll] = useState(false)
 
   const location = useLocation()
 
@@ -67,8 +68,11 @@ export default function SendMessage(props) {
   }
 
   const selectTemplate = (template) => {
-    const foundTemplate = templates.find(_template => _template._id.toString() === template.toString())
-    setTemplateContent(foundTemplate.content);
+    const foundTemplate = templates.find(
+      (_template) => _template._id.toString() === template.toString(),
+    )
+    setTemplateContent(foundTemplate.content)
+    setTemplateName(foundTemplate.name)
   }
 
   function handleArea(e) {
@@ -106,7 +110,7 @@ export default function SendMessage(props) {
       .get(`${BACKEND_HOST}/customer/filter`, {
         params: {
           ...filter,
-          limit: 10000
+          limit: 10000,
         },
       })
       .then((res) => {
@@ -117,29 +121,35 @@ export default function SendMessage(props) {
   }
 
   const selectCustomer = (customer) => {
-    const foundCustomer = selectedCustomers.findIndex(_customer => _customer._id === customer._id);
+    const foundCustomer = selectedCustomers.findIndex((_customer) => _customer._id === customer._id)
     if (foundCustomer === -1) {
-      setSelectedCustomers([...selectedCustomers, customer]);
+      setSelectedCustomers([...selectedCustomers, customer])
     } else {
-      setSelectedCustomers(oldValue => {
-        oldValue.splice(foundCustomer, 1);
+      setSelectedCustomers((oldValue) => {
+        oldValue.splice(foundCustomer, 1)
         return [...oldValue]
-      });
+      })
     }
   }
 
   const toggleAll = () => {
     if (!shouldSelectAll) {
-      setShouldSelectAll(true);
-      setSelectedCustomers(customers);
+      setShouldSelectAll(true)
+      setSelectedCustomers(customers)
     } else {
-      setShouldSelectAll(false);
-      setSelectedCustomers([]);
+      setShouldSelectAll(false)
+      setSelectedCustomers([])
     }
   }
 
-  const handleSend = () => {
-    const encodedContent = btoa(templateContent);
+  const handleSend = async () => {
+    const encodedContent = btoa(templateContent)
+    const phones = selectedCustomers.map((customer) => customer.phone)
+    await axios.post(`${BACKEND_HOST}/sms/send`, {
+      content: encodedContent,
+      phones,
+      templateName,
+    })
   }
 
   return (
@@ -154,16 +164,18 @@ export default function SendMessage(props) {
           </div>
           <CFormSelect
             onChange={(e) => selectTemplate(e.target.value)}
-            size="sm" className="mb-3" aria-label="Small select example">
+            size="sm"
+            className="mb-3"
+            aria-label="Small select example"
+          >
             <option>Choose template</option>
             {templates.map((template, index) => (
-              <option key={index} value={template._id}>{template.name}</option>
+              <option key={index} value={template._id}>
+                {template.name}
+              </option>
             ))}
           </CFormSelect>
-          {templateContent.length > 0 &&
-            <CFormTextarea
-              value={templateContent}/>
-          }
+          {templateContent.length > 0 && <CFormTextarea value={templateContent} />}
         </CCol>
         <CCol style={{ border: '1px solid black' }}>
           <CForm>
@@ -367,7 +379,14 @@ export default function SendMessage(props) {
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell scope="col">
-                  <CFormCheck onClick={toggleAll} onChange={() => {}} checked={shouldSelectAll} inline id="inlineCheckbox1" value="" />
+                  <CFormCheck
+                    onClick={toggleAll}
+                    onChange={() => {}}
+                    checked={shouldSelectAll}
+                    inline
+                    id="inlineCheckbox1"
+                    value=""
+                  />
                 </CTableHeaderCell>
                 <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
@@ -384,11 +403,17 @@ export default function SendMessage(props) {
             </CTableHead>
             <CTableBody>
               {customers.map((customer, index) => {
-                const isChecked = !!selectedCustomers.find(_customer => _customer._id === customer._id)
-                return  (
+                const isChecked = !!selectedCustomers.find(
+                  (_customer) => _customer._id === customer._id,
+                )
+                return (
                   <CTableRow key={index}>
                     <CTableDataCell style={{ width: '200px' }}>
-                      <CFormCheck checked={isChecked} onClick={() => selectCustomer(customer)} onChange={() => {}}/>
+                      <CFormCheck
+                        checked={isChecked}
+                        onClick={() => selectCustomer(customer)}
+                        onChange={() => {}}
+                      />
                     </CTableDataCell>
                     <CTableDataCell>{customer.name}</CTableDataCell>
                     <CTableDataCell>{customer.phone}</CTableDataCell>
@@ -402,10 +427,11 @@ export default function SendMessage(props) {
                     <CTableDataCell>{customer.caringArea.toString()}</CTableDataCell>
                     <CTableDataCell>{customer.caringProduct.toString()}</CTableDataCell>
                   </CTableRow>
-                )})}
-                <CButton onClick={handleSend} color="primary" className="btn btn-primary mt-3">
-                  Send
-                </CButton>
+                )
+              })}
+              <CButton onClick={handleSend} color="primary" className="btn btn-primary mt-3">
+                Send
+              </CButton>
             </CTableBody>
           </CTable>
         </CCol>
