@@ -52,7 +52,29 @@ const EditCustomerModal = ({}, ref) => {
   const arena = data.caringArea
   const provinces = provinces_item
 
-  console.log(caringArea)
+  useEffect(() => {
+    if (data) {
+      setPhone(data.phone);
+      setName(data.name);
+      setAge(data.age);
+      setJob(data.job);
+      setUserArea(data.userArea);
+      setGoodWill(data.goodwill);
+      setIntimacy(data.intimacy);
+      setMaxBudget(data.maxBudget);
+      setMinBudget(data.minBudget);
+      setCaringArea(data.caringArea);
+      setCaringProduct(data.caringProduct);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setError(false);
+      setSuccess(false);
+    }, 3000)
+  }, [error, success])
+
   function handleArea(e) {
     const { value, checked } = e.target
 
@@ -60,7 +82,7 @@ const EditCustomerModal = ({}, ref) => {
       setCaringArea((pre) => [...pre, value])
     } else {
       setCaringArea((pre) => {
-        return [...pre.filter((v) => v === value)]
+        return [...pre.filter((v) => v !== value)]
       })
     }
   }
@@ -83,21 +105,22 @@ const EditCustomerModal = ({}, ref) => {
       setData(item)
     },
   }))
-  console.log(data)
   const handleSubmit = () => {
     axios
-      .patch(`${BACKEND_HOST}/customer/${data.id}`, {
-        name,
-        phone,
-        age,
-        job,
-        userArea,
-        goodwill,
-        intimacy,
-        minBudget,
-        maxBudget,
-        caringArea,
-        caringProduct,
+      .patch(`${BACKEND_HOST}/customer/${data._id}`, {
+        values: {
+          name,
+          phone,
+          age,
+          job,
+          userArea,
+          goodwill,
+          intimacy,
+          minBudget,
+          maxBudget,
+          caringArea,
+          caringProduct,
+        }
       })
       .then((res) => {
         setSuccess(true)
@@ -241,6 +264,7 @@ const EditCustomerModal = ({}, ref) => {
               <CInputGroup>
                 <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringArea?.includes('da-nang')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -251,6 +275,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringArea?.includes('khanh-hoa')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -261,6 +286,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringArea?.includes('phu-quoc')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -271,6 +297,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringArea?.includes('sai-gon')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -281,6 +308,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringArea?.includes('dong-nai')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -291,6 +319,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringArea?.includes('vung-tau')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -316,6 +345,7 @@ const EditCustomerModal = ({}, ref) => {
               <CInputGroup>
                 <div className="input-group align-items-center" style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringProduct?.includes('dat_nen')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -326,6 +356,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringProduct?.includes('dat_lon')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -336,6 +367,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringProduct?.includes('bds_trung_tam')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -346,6 +378,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringProduct?.includes('bds_dong_tien')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"
@@ -356,6 +389,7 @@ const EditCustomerModal = ({}, ref) => {
                 </div>
                 <div className="input-group align-items-center  " style={{ maxWidth: '150px' }}>
                   <input
+                    checked={caringProduct?.includes('du_an')}
                     style={{ width: '16px', height: '16px' }}
                     className="mx-1"
                     type="checkbox"

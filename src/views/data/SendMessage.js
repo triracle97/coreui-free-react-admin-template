@@ -5,6 +5,7 @@
 import { cilArrowRight, cilMoney, cilStar } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
+  CAlert,
   CButton,
   CCol,
   CContainer,
@@ -41,9 +42,10 @@ export default function SendMessage(props) {
   const [caringArea, setCaringArea] = useState([])
   const [caringProduct, setCaringProduct] = useState([])
   const [templateContent, setTemplateContent] = useState('')
-  const [templateName, setTemplateName] = useState('')
+  const [templateId, setTemplateId] = useState(null)
   const [selectedCustomers, setSelectedCustomers] = useState([])
   const [shouldSelectAll, setShouldSelectAll] = useState(false)
+  const [isSent, setIsSent] = useState(false);
 
   const location = useLocation()
 
@@ -72,7 +74,7 @@ export default function SendMessage(props) {
       (_template) => _template._id.toString() === template.toString(),
     )
     setTemplateContent(foundTemplate.content)
-    setTemplateName(foundTemplate.name)
+    setTemplateId(foundTemplate._id)
   }
 
   function handleArea(e) {
@@ -143,13 +145,12 @@ export default function SendMessage(props) {
   }
 
   const handleSend = async () => {
-    const encodedContent = btoa(templateContent)
-    const phones = selectedCustomers.map((customer) => customer.phone)
     await axios.post(`${BACKEND_HOST}/sms/send`, {
-      content: encodedContent,
-      phones,
-      templateName,
+      selectedCustomers: selectedCustomers.map(user => user._id),
+      templateId,
+      productId
     })
+    setIsSent(true);
   }
 
   return (
@@ -432,6 +433,8 @@ export default function SendMessage(props) {
               <CButton onClick={handleSend} color="primary" className="btn btn-primary mt-3">
                 Send
               </CButton>
+              {isSent &&
+                <CAlert color="success">{'Done'}</CAlert>}
             </CTableBody>
           </CTable>
         </CCol>
